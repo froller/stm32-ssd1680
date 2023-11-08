@@ -60,10 +60,7 @@ void SSD1680_Init(SSD1680_HandleTypeDef *hepd) {
   SSD1680_UpdateControl2(hepd);
 
   /***** #4 *****/
-
-  // 0x01
-  const uint8_t dataEntryMode[] = { 0x03 };
-  SSD1680_Send(hepd, SSD1680_DATA_ENTRY_MODE, dataEntryMode, sizeof(dataEntryMode));   // 0x11
+  SSD1680_DataEntryMode(hepd, RightThenDown);
 
   /***** #5 *****/
   const uint8_t tempSensor[] = { 0x80 };
@@ -174,6 +171,10 @@ HAL_StatusTypeDef SSD1680_Refresh(SSD1680_HandleTypeDef *hepd) {
     return status;
   SSD1680_Wait(hepd);
   return status;
+}
+
+HAL_StatusTypeDef SSD1680_DataEntryMode(SSD1680_HandleTypeDef *hepd, const enum SSD1680_DataEntryMode mode) {
+  return SSD1680_Send(hepd, SSD1680_DATA_ENTRY_MODE, &mode, sizeof(mode));   // 0x11
 }
 
 HAL_StatusTypeDef SSD1680_GateScanRange(SSD1680_HandleTypeDef *hepd, const uint16_t top, const uint16_t height) {

@@ -87,6 +87,17 @@ enum SSD1680_RAMBank {
   RAMRed
 };
 
+enum SSD1680_DataEntryMode {
+  LeftThenUp = 0,
+  RightThenUp,
+  LeftThenDown,
+  RightThenDown,
+  UpThenLeft,
+  UpThenRight,
+  DownThenLeft,
+  DownThenRight
+};
+
 typedef struct {
   SPI_HandleTypeDef *SPI_Handle;
   GPIO_TypeDef *CS_Port;
@@ -118,6 +129,7 @@ HAL_StatusTypeDef SSD1680_Clear(SSD1680_HandleTypeDef *hepd, const enum SSD1680_
 HAL_StatusTypeDef SSD1680_Checker(SSD1680_HandleTypeDef *hepd);
 HAL_StatusTypeDef SSD1680_RAMFill(SSD1680_HandleTypeDef *hepd, const enum SSD1680_Pattern kx, const enum SSD1680_Pattern ky, const enum SSD1680_Pattern rx, const enum SSD1680_Pattern ry, const enum SSD1680_Color color);
 HAL_StatusTypeDef SSD1680_Refresh(SSD1680_HandleTypeDef *hepd);
+HAL_StatusTypeDef SSD1680_DataEntryMode(SSD1680_HandleTypeDef *hepd, const enum SSD1680_DataEntryMode mode);
 HAL_StatusTypeDef SSD1680_GateScanRange(SSD1680_HandleTypeDef *hepd, const uint16_t top, const uint16_t height);
 HAL_StatusTypeDef SSD1680_RAMXRange(SSD1680_HandleTypeDef *hepd, const uint8_t left, const uint8_t width);
 HAL_StatusTypeDef SSD1680_RAMYRange(SSD1680_HandleTypeDef *hepd, const uint16_t top, const uint16_t height);
