@@ -55,7 +55,7 @@ static void MX_SSD1680_Init(void) {
 }
 ```
 
-# See Also
+## See Also
 
 - https://v4.cecdn.yun300.cn/100001_1909185147/SSD1680.pdf
 
