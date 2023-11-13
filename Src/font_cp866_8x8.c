@@ -1,3 +1,16 @@
+/*
+ * font_cp866_8x8.c
+ *
+ *  Created on: Nov 10, 2023
+ *      Author: Alexander Frolov <alex.froller@gmail.com>
+ */
+
+/**
+ * @file
+ * @brief 8x16 font, CP866
+ * @see SSD1680_Text
+ */
+
 #include "../Inc/fonts.h"
 
 const SSD1680_FontTypeDef cp866_8x8 = {

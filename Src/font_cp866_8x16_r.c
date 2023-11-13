@@ -1,3 +1,17 @@
+/*
+ * font_cp866_8x16_r.c
+ *
+ *  Created on: Nov 12, 2023
+ *      Author: Alexander Frolov <alex.froller@gmail.com>
+ */
+
+/**
+ * @file
+ * @brief 8x16 font, CP866, right orientation for vertical output
+ * @see cp866_8x16
+ * @see SSD1680_VerticalText
+ */
+
 #include "../Inc/fonts.h"
 
 const SSD1680_FontTypeDef cp866_8x16_r = {

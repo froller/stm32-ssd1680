@@ -1,8 +1,8 @@
 /*
  * SSD1680.h
  *
- *  Created on: 30 янв. 2023 г.
- *      Author: froller
+ *  Created on: Jan 30, 2023
+ *      Author: Alexander Frolov <alex.froller@gmail.com>
  */
 
 #ifndef INC_SSD1680_H_
@@ -10,28 +10,6 @@
 
 #include "stm32f1xx_hal.h"
 #include "fonts.h"
-
-#define SSD1680_176x264x1
-#define SSD1680_FRAME_BUFFER
-
-#if defined(SSD1680_152x152x2)
-#   define SSD1680_SCREEN_WIDTH 152
-#   define SSD1680_SCREEN_HEIGHT 152
-#   define SSD1680_COLOR_DEPTH 2
-#   define SSD1680_X_SCAN_MODE NarrowScan
-#elif defined(SSD1680_176x264x1)
-#   define SSD1680_SCREEN_WIDTH 176
-#   define SSD1680_SCREEN_HEIGHT 264
-#   define SSD1680_COLOR_DEPTH 1
-#   define SSD1680_X_SCAN_MODE WideScan
-#else
-#   define SSD1680_SCREEN_WIDTH 176
-#   define SSD1680_SCREEN_HEIGHT 296
-#   define SSD1680_COLOR_DEPTH 1
-#   define SSD1680_X_SCAN_MODE WideScan
-#endif
-
-#define SSD1680_TIMEOUT 100
 
 #define SSD1680_GATE_SCAN 0x01
 #define SSD1680_GATE_VOLTAGE 0x03
@@ -98,24 +76,32 @@ enum SSD1680_DataEntryMode {
   DownThenRight
 };
 
+/**
+ * @struct SSD1680_HandleTypeDef
+ * SSD1680 handle
+ */
 typedef struct {
-  SPI_HandleTypeDef *SPI_Handle;
-  GPIO_TypeDef *CS_Port;
-  uint16_t CS_Pin;
-  GPIO_TypeDef *DC_Port;
-  uint16_t DC_Pin;
-  GPIO_TypeDef *RESET_Port;
-  uint16_t RESET_Pin;
-  GPIO_TypeDef *BUSY_Port;
-  uint16_t BUSY_Pin;
-  uint8_t Color_Depth;
-  enum SSD1680_ScanMode Scan_Mode;
-  uint8_t Resolution_X;
-  uint16_t Resolution_Y;
+  SPI_HandleTypeDef *SPI_Handle;	/**< SPI handle */
+  uint32_t SPI_Timeout;				/**< SPI timeout in ms */
+  GPIO_TypeDef *CS_Port;			/**< CS signal GPIO port */
+  uint16_t CS_Pin;					/**< CS signal pin number */
+  GPIO_TypeDef *DC_Port;			/**< DC signal GPIO port */
+  uint16_t DC_Pin;					/**< DC signal pin number */
+  GPIO_TypeDef *RESET_Port;			/**< RESET signal GPIO port */
+  uint16_t RESET_Pin;				/**< RESET signal pin number */
+  GPIO_TypeDef *BUSY_Port;			/**< BUSY signal GPIO port */
+  uint16_t BUSY_Pin;				/**< BUSY signal pin number */
+  uint8_t Color_Depth;				/**< Color depth. Either 1 or 2 bits. */
+  enum SSD1680_ScanMode Scan_Mode;	/**< @brief Source scan mode.
+  	  	  	  	  	  	  				Smaller displays like 152x152 uses narrow scan. @see https://v4.cecdn.yun300.cn/100001_1909185147/SSD1680.pdf page 25. */
+  uint8_t Resolution_X;				/**< Hirizontal resolution. Must be a multiple of 8. */
+  uint16_t Resolution_Y;			/**< Vertical resolution */
+  /** @internal */
 #if defined(DEBUG)
-  GPIO_TypeDef *LED_Port;
-  uint16_t LED_Pin;
+  GPIO_TypeDef *LED_Port;			/**< Activity LED GPIO port. Safe to set to NULL. */
+  uint16_t LED_Pin;					/**< Activity LED pin number */
 #endif // DEBUG
+  /** @endinternal */
 } SSD1680_HandleTypeDef;
 
 // Connectivity
@@ -140,6 +126,7 @@ HAL_StatusTypeDef SSD1680_RAMReadOption(SSD1680_HandleTypeDef *hepd, const enum 
 uint16_t SSD1680_ReadTemp(SSD1680_HandleTypeDef *hepd);
 HAL_StatusTypeDef SSD1680_ResetRange(SSD1680_HandleTypeDef *hepd);
 HAL_StatusTypeDef SSD1680_StartAddress(SSD1680_HandleTypeDef *hepd, const uint8_t x, const uint16_t y);
+// High level functions
 HAL_StatusTypeDef SSD1680_GetRegion(SSD1680_HandleTypeDef *hepd, const uint8_t left, const uint16_t top, const uint8_t width, const uint16_t height, uint8_t *data_k, uint8_t *data_r);
 HAL_StatusTypeDef SSD1680_SetRegion(SSD1680_HandleTypeDef *hepd, const uint8_t left, const uint16_t top, const uint8_t width, const uint16_t height, const uint8_t *data_k, const uint8_t *data_r);
 HAL_StatusTypeDef SSD1680_Text(SSD1680_HandleTypeDef *hepd, const uint8_t left, const uint16_t top, const char *string, const SSD1680_FontTypeDef *font);

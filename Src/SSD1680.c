@@ -1,8 +1,8 @@
 /*
  * SSD1680.h
  *
- *  Created on: 30 янв. 2023 г.
- *      Author: froller
+ *  Created on: Jan 13, 2023
+ *      Author: Alexander Frolov <alex.froller@gmail.com>
  */
 
 #include "../Inc/SSD1680.h"
@@ -85,7 +85,7 @@ HAL_StatusTypeDef SSD1680_Send(SSD1680_HandleTypeDef *hepd, const uint8_t addr, 
 #endif
   HAL_GPIO_WritePin(hepd->CS_Port, hepd->CS_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(hepd->DC_Port, hepd->DC_Pin, GPIO_PIN_RESET);
-  if ((status = HAL_SPI_Transmit(hepd->SPI_Handle, (uint8_t *)&addr, sizeof(addr), SSD1680_TIMEOUT))) {
+  if ((status = HAL_SPI_Transmit(hepd->SPI_Handle, (uint8_t *)&addr, sizeof(addr), hepd->SPI_Timeout))) {
     HAL_GPIO_WritePin(hepd->DC_Port, hepd->DC_Pin, GPIO_PIN_SET);
     HAL_GPIO_WritePin(hepd->CS_Port, hepd->CS_Pin, GPIO_PIN_SET);
 #if defined(DEBUG)
@@ -96,7 +96,7 @@ HAL_StatusTypeDef SSD1680_Send(SSD1680_HandleTypeDef *hepd, const uint8_t addr, 
   }
   HAL_GPIO_WritePin(hepd->DC_Port, hepd->DC_Pin, GPIO_PIN_SET);
   if (size > 0) {
-    status = HAL_SPI_Transmit(hepd->SPI_Handle, (uint8_t *)pData, size, SSD1680_TIMEOUT);
+    status = HAL_SPI_Transmit(hepd->SPI_Handle, (uint8_t *)pData, size, hepd->SPI_Timeout);
   }
   HAL_GPIO_WritePin(hepd->CS_Port, hepd->CS_Pin, GPIO_PIN_SET);
 #if defined(DEBUG)
@@ -114,7 +114,7 @@ HAL_StatusTypeDef SSD1680_Receive(SSD1680_HandleTypeDef *hepd, const uint8_t add
 #endif
   HAL_GPIO_WritePin(hepd->CS_Port, hepd->CS_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(hepd->DC_Port, hepd->DC_Pin, GPIO_PIN_RESET);
-  if ((status = HAL_SPI_Transmit(hepd->SPI_Handle, (uint8_t *)&addr, sizeof(addr), SSD1680_TIMEOUT))) {
+  if ((status = HAL_SPI_Transmit(hepd->SPI_Handle, (uint8_t *)&addr, sizeof(addr), hepd->SPI_Timeout))) {
     HAL_GPIO_WritePin(hepd->DC_Port, hepd->DC_Pin, GPIO_PIN_SET);
     HAL_GPIO_WritePin(hepd->CS_Port, hepd->CS_Pin, GPIO_PIN_SET);
 #if defined(DEBUG)
@@ -125,7 +125,7 @@ HAL_StatusTypeDef SSD1680_Receive(SSD1680_HandleTypeDef *hepd, const uint8_t add
   }
   HAL_GPIO_WritePin(hepd->DC_Port, hepd->DC_Pin, GPIO_PIN_SET);
   if (size > 0) {
-    status = HAL_SPI_Receive(hepd->SPI_Handle, pData, size, SSD1680_TIMEOUT);
+    status = HAL_SPI_Receive(hepd->SPI_Handle, pData, size, hepd->SPI_Timeout);
   }
   HAL_GPIO_WritePin(hepd->CS_Port, hepd->CS_Pin, GPIO_PIN_SET);
 #if defined(DEBUG)
@@ -295,7 +295,7 @@ HAL_StatusTypeDef SSD1680_GetRegion(SSD1680_HandleTypeDef *hepd, const uint8_t l
     if (hepd->LED_Port)
       HAL_GPIO_WritePin(hepd->LED_Port, hepd->LED_Pin, GPIO_PIN_RESET);
 #endif // DEBUG
-    if ((status = HAL_SPI_Transmit(hepd->SPI_Handle, &cmd, 1, SSD1680_TIMEOUT))) {
+    if ((status = HAL_SPI_Transmit(hepd->SPI_Handle, &cmd, 1, hepd->SPI_Timeout))) {
       HAL_GPIO_WritePin(hepd->DC_Port, hepd->DC_Pin, GPIO_PIN_SET);
       goto exit_GetRegion;
     }
@@ -305,10 +305,10 @@ HAL_StatusTypeDef SSD1680_GetRegion(SSD1680_HandleTypeDef *hepd, const uint8_t l
 #define SSD1680_DUMMY_BYTES 2
 #if SSD1680_DUMMY_BYTES
       // Reading dummy bytes
-      if ((status = HAL_SPI_Receive(hepd->SPI_Handle, pData, SSD1680_DUMMY_BYTES, SSD1680_TIMEOUT)))
+      if ((status = HAL_SPI_Receive(hepd->SPI_Handle, pData, SSD1680_DUMMY_BYTES, hepd->SPI_Timeout)))
         goto exit_GetRegion;
 #endif // SSD1680_DUMMY_BYTES
-      if ((status = HAL_SPI_Receive(hepd->SPI_Handle, pData, width / 8 * height, SSD1680_TIMEOUT)))
+      if ((status = HAL_SPI_Receive(hepd->SPI_Handle, pData, width / 8 * height, hepd->SPI_Timeout)))
         goto exit_GetRegion;
   }
 exit_GetRegion:
