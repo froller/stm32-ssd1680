@@ -345,6 +345,7 @@ HAL_StatusTypeDef SSD1680_SetRegion(SSD1680_HandleTypeDef *hepd, const uint8_t l
 
 HAL_StatusTypeDef SSD1680_Text(SSD1680_HandleTypeDef *hepd, const uint8_t left, const uint16_t top, const char *string, const SSD1680_FontTypeDef *font) {
   const uint8_t tab_width = 4;
+  const uint8_t glyphSize = font->width / 8 * font->height;
   const size_t len = strlen(string);
   uint8_t pos_x = 0;
   uint8_t pos_y = 0;
@@ -367,8 +368,8 @@ HAL_StatusTypeDef SSD1680_Text(SSD1680_HandleTypeDef *hepd, const uint8_t left, 
     default:
       {
         HAL_StatusTypeDef status = HAL_OK;
-        uint8_t buffer[font->width / 8 * font->height];
-        memcpy(buffer, font->data + ((unsigned char)string[i] * font->height), sizeof(buffer));
+        uint8_t buffer[glyphSize];
+        memcpy(buffer, font->data + ((unsigned char)string[i] * glyphSize), sizeof(buffer));
         for (uint8_t j = 0; j < sizeof(buffer); ++j)
           buffer[j] = ~buffer[j];
         if ((status = SSD1680_SetRegion(hepd, left + font->width * pos_x, top + font->height * pos_y, font->width, font->height, buffer, NULL)))
@@ -378,4 +379,52 @@ HAL_StatusTypeDef SSD1680_Text(SSD1680_HandleTypeDef *hepd, const uint8_t left, 
     }
   }
   return HAL_OK;
+}
+
+HAL_StatusTypeDef SSD1680_VerticalText(SSD1680_HandleTypeDef *hepd, const uint8_t left, const uint16_t top, const char *string, const SSD1680_FontTypeDef *font) {
+  const uint8_t tab_width = 4;
+  const uint8_t glyphSize = font->width / 8 * font->height;
+  const size_t len = strlen(string);
+  uint8_t pos_x = 0;
+  uint8_t pos_y = 0;
+  for (size_t i = 0; i < len; ++i) {
+    switch (string[i]) {
+    case 0x08:    // backspace
+      if (pos_y)
+        --pos_y;
+      break;
+    case 0x09:    // tab
+      pos_y = (pos_y / tab_width + 1) * tab_width;
+      break;
+    case 0x0A:    // line feed
+      --pos_x;
+      pos_y = 0;
+      break;
+    case 0x0D:    // carriage return
+      pos_y = 0;
+      break;
+    default:
+      {
+        HAL_StatusTypeDef status = HAL_OK;
+        uint8_t buffer[glyphSize];
+        memcpy(buffer, font->data + ((unsigned char)string[i] * glyphSize), sizeof(buffer));
+        for (uint8_t j = 0; j < sizeof(buffer); ++j)
+          buffer[j] = ~buffer[j];
+        if ((status = SSD1680_SetRegion(hepd, left + font->width * pos_x, top + font->height * pos_y, font->width, font->height, buffer, NULL)))
+          return status;
+        ++pos_y;
+      }
+    }
+  }
+  return HAL_OK;
+}
+
+void ByteGridTranspose(uint8_t *out, const uint16_t width, const uint16_t height, const uint8_t *in) {
+  for (uint16_t y = 0; y < height; ++y)
+    for (uint16_t x = 0; x < width; ++x) {
+      uint16_t iB = (y * width + x) / 8;
+      uint16_t oB = (x * height) / 8 + (height - y - 1) / 8;
+      for (uint8_t b = 0; b < 8; ++b)
+        out[oB] = out[oB] | (((in[iB] >> (7 - x % 8)) & 1) <<  (0 + y % 8));
+    }
 }
