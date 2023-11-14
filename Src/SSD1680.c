@@ -119,7 +119,7 @@ HAL_StatusTypeDef SSD1680_Send(SSD1680_HandleTypeDef *hepd, const uint8_t comman
 #endif
   HAL_GPIO_WritePin(hepd->CS_Port, hepd->CS_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(hepd->DC_Port, hepd->DC_Pin, GPIO_PIN_RESET);
-  if ((status = HAL_SPI_Transmit(hepd->SPI_Handle, (uint8_t *)&addr, sizeof(command), hepd->SPI_Timeout))) {
+  if ((status = HAL_SPI_Transmit(hepd->SPI_Handle, (uint8_t *)&command, sizeof(command), hepd->SPI_Timeout))) {
     HAL_GPIO_WritePin(hepd->DC_Port, hepd->DC_Pin, GPIO_PIN_SET);
     HAL_GPIO_WritePin(hepd->CS_Port, hepd->CS_Pin, GPIO_PIN_SET);
 #if defined(DEBUG)
@@ -160,7 +160,7 @@ HAL_StatusTypeDef SSD1680_Receive(SSD1680_HandleTypeDef *hepd, const uint8_t com
 #endif
   HAL_GPIO_WritePin(hepd->CS_Port, hepd->CS_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(hepd->DC_Port, hepd->DC_Pin, GPIO_PIN_RESET);
-  if ((status = HAL_SPI_Transmit(hepd->SPI_Handle, (uint8_t *)&addr, sizeof(command), hepd->SPI_Timeout))) {
+  if ((status = HAL_SPI_Transmit(hepd->SPI_Handle, (uint8_t *)&command, sizeof(command), hepd->SPI_Timeout))) {
     HAL_GPIO_WritePin(hepd->DC_Port, hepd->DC_Pin, GPIO_PIN_SET);
     HAL_GPIO_WritePin(hepd->CS_Port, hepd->CS_Pin, GPIO_PIN_SET);
 #if defined(DEBUG)
