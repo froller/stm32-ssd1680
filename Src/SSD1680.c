@@ -9,6 +9,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+/**
+ * @brief Hardware reset the display
+ * @details Ties !RESET line to GND for 2 ms
+ * @param[in] hepd: SSD1680 handle pointer
+ */
 void SSD1680_Reset(SSD1680_HandleTypeDef *hepd) {
   HAL_GPIO_WritePin(hepd->RESET_Port, hepd->RESET_Pin, GPIO_PIN_RESET);
   HAL_Delay(2);
@@ -16,6 +21,17 @@ void SSD1680_Reset(SSD1680_HandleTypeDef *hepd) {
   HAL_Delay(10);
 }
 
+/**
+ * @brief Initialize the display
+ * @details
+ * @li Reset the disply
+ * @li Send initialization sequence
+ * @li Set source and gate scan ranges to maximum resolution
+ * @li Enable internal temperature sensor
+ * @li Setup voltage sources
+ * @li Set data entry mode to @ref RightThenDown
+ * @param[in] hepd: SSD1680 handle pointer
+ */
 void SSD1680_Init(SSD1680_HandleTypeDef *hepd) {
   HAL_GPIO_WritePin(hepd->RESET_Port, hepd->RESET_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(hepd->CS_Port, hepd->CS_Pin, GPIO_PIN_SET);
@@ -72,12 +88,30 @@ void SSD1680_Init(SSD1680_HandleTypeDef *hepd) {
 #endif // DEBUG
 }
 
+/**
+ * @brief Wait for display ready
+ * @details Waits for BUSY line to become low. Spins with 2ms delay while not yet.
+ * @param[in] hepd: SSD1680 handle pointer
+ */
 void SSD1680_Wait(SSD1680_HandleTypeDef *hepd) {
   while (HAL_GPIO_ReadPin(hepd->BUSY_Port, hepd->BUSY_Pin) == GPIO_PIN_SET)
     HAL_Delay(2);
 }
 
-HAL_StatusTypeDef SSD1680_Send(SSD1680_HandleTypeDef *hepd, const uint8_t addr, const uint8_t *pData, const size_t size) {
+/**
+ * @brief Send command and data to the display
+ * @details Send 1 or more bytes to the display.
+ * First bytes is sent with !DC line pulled low and interpreted as a command (or register).
+ * Other bytes are sent with !DC line pushed high and interpreted as arguments (or value).
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] command: command byte
+ * @param[in] pData: pointer to the command arguments
+ * @param[in] size: size of command arguments
+ * @return HAL status
+ * @see https://v4.cecdn.yun300.cn/100001_1909185147/SSD1680.pdf page 20 for full command list.
+ *
+ */
+HAL_StatusTypeDef SSD1680_Send(SSD1680_HandleTypeDef *hepd, const uint8_t command, const uint8_t *pData, const size_t size) {
   HAL_StatusTypeDef status = HAL_OK;
 #if defined(DEBUG)
   if (hepd->LED_Port)
@@ -85,7 +119,7 @@ HAL_StatusTypeDef SSD1680_Send(SSD1680_HandleTypeDef *hepd, const uint8_t addr, 
 #endif
   HAL_GPIO_WritePin(hepd->CS_Port, hepd->CS_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(hepd->DC_Port, hepd->DC_Pin, GPIO_PIN_RESET);
-  if ((status = HAL_SPI_Transmit(hepd->SPI_Handle, (uint8_t *)&addr, sizeof(addr), hepd->SPI_Timeout))) {
+  if ((status = HAL_SPI_Transmit(hepd->SPI_Handle, (uint8_t *)&addr, sizeof(command), hepd->SPI_Timeout))) {
     HAL_GPIO_WritePin(hepd->DC_Port, hepd->DC_Pin, GPIO_PIN_SET);
     HAL_GPIO_WritePin(hepd->CS_Port, hepd->CS_Pin, GPIO_PIN_SET);
 #if defined(DEBUG)
@@ -106,7 +140,19 @@ HAL_StatusTypeDef SSD1680_Send(SSD1680_HandleTypeDef *hepd, const uint8_t addr, 
   return status;
 }
 
-HAL_StatusTypeDef SSD1680_Receive(SSD1680_HandleTypeDef *hepd, const uint8_t addr, uint8_t *pData, const size_t size) {
+/**
+ * @brief Send command and receive data from the display
+ * @details Send 1 to the display then receive data array.
+ * First bytes is sent with !DC line pulled low and interpreted as a command (or register).
+ * Other bytes are received with !DC line pushed high and interpreted as return value.
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] command: command byte.
+ * @param[in] pData: pointer to the buffer for return value
+ * @param[in] size: size of the buffer in bytes
+ * @return HAL status
+ * @see https://v4.cecdn.yun300.cn/100001_1909185147/SSD1680.pdf page 20 for full command list.
+ */
+HAL_StatusTypeDef SSD1680_Receive(SSD1680_HandleTypeDef *hepd, const uint8_t command, uint8_t *pData, const size_t size) {
   HAL_StatusTypeDef status = HAL_OK;
 #if defined(DEBUG)
   if (hepd->LED_Port)
@@ -114,7 +160,7 @@ HAL_StatusTypeDef SSD1680_Receive(SSD1680_HandleTypeDef *hepd, const uint8_t add
 #endif
   HAL_GPIO_WritePin(hepd->CS_Port, hepd->CS_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(hepd->DC_Port, hepd->DC_Pin, GPIO_PIN_RESET);
-  if ((status = HAL_SPI_Transmit(hepd->SPI_Handle, (uint8_t *)&addr, sizeof(addr), hepd->SPI_Timeout))) {
+  if ((status = HAL_SPI_Transmit(hepd->SPI_Handle, (uint8_t *)&addr, sizeof(command), hepd->SPI_Timeout))) {
     HAL_GPIO_WritePin(hepd->DC_Port, hepd->DC_Pin, GPIO_PIN_SET);
     HAL_GPIO_WritePin(hepd->CS_Port, hepd->CS_Pin, GPIO_PIN_SET);
 #if defined(DEBUG)
@@ -135,14 +181,43 @@ HAL_StatusTypeDef SSD1680_Receive(SSD1680_HandleTypeDef *hepd, const uint8_t add
   return status;
 }
 
+/**
+ * @brief Clears the screen
+ * @details Fills the screen with specified solid color
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] color: color to fill the screen
+ * @return HAL status
+ * @note Slow. Waits for display ready.
+ */
 HAL_StatusTypeDef SSD1680_Clear(SSD1680_HandleTypeDef *hepd, const enum SSD1680_Color color) {
   return SSD1680_RAMFill(hepd, PatternSolid, PatternSolid, PatternSolid, PatternSolid, color);
 }
 
+/**
+ * @brief Shows checker pattern
+ * @details Fills the screen with checker pattern 16x16 for primary (black) color and 8x8 for secondary (red) color.
+ * @param[in] hepd: SSD1680 handle pointer
+ * @return HAL status
+ * @note Slow. Waits for display ready.
+ * @see SSD1680_RAMFill for custom patterns
+ */
 HAL_StatusTypeDef SSD1680_Checker(SSD1680_HandleTypeDef *hepd) {
   return SSD1680_RAMFill(hepd, Pattern16, Pattern16, Pattern8, Pattern8, ColorAnotherRed);
 }
 
+/**
+ * @brief Shows checker pattern
+ * @details Fills the screen with checker pattern with specified strides for primary and secondary colors.
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] kx: horizontal stride for primary color
+ * @param[in] ky: vertical stride for primary color
+ * @param[in] rx: horizontal stride for secondary color
+ * @param[in] ry: vertical stride for secondary color
+ * @param[in] color: color of the top-left pixel
+ * @return HAL status
+ * @note Slow. Waits for display ready.
+ * @see SSD1680_Checker for common test pattern
+ */
 HAL_StatusTypeDef SSD1680_RAMFill(SSD1680_HandleTypeDef *hepd, const enum SSD1680_Pattern kx, const enum SSD1680_Pattern ky, const enum SSD1680_Pattern rx, const enum SSD1680_Pattern ry, const enum SSD1680_Color color) {
   HAL_StatusTypeDef status = HAL_OK;
   if ((status = SSD1680_RAMXRange(hepd, 0, hepd->Resolution_X)))
@@ -160,6 +235,13 @@ HAL_StatusTypeDef SSD1680_RAMFill(SSD1680_HandleTypeDef *hepd, const enum SSD168
   return status;
 }
 
+/**
+ * @brief Update the display
+ * @details Start update sequence to show internal memory content on the display.
+ * @param[in] hepd: SSD1680 handle pointer
+ * @return HAL status
+ * @note Slow. Takes half to several seconds depending on display model.
+ */
 HAL_StatusTypeDef SSD1680_Refresh(SSD1680_HandleTypeDef *hepd) {
   HAL_StatusTypeDef status = HAL_OK;
   const uint8_t boosterSoftStart[] = { 0x80, 0x90, 0x90, 0x00 };
@@ -173,10 +255,25 @@ HAL_StatusTypeDef SSD1680_Refresh(SSD1680_HandleTypeDef *hepd) {
   return status;
 }
 
+/**
+ * @brief Set data entry mode
+ * @details Set behavior of address pointer on bulk data transfer into or out of RAM
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] mode: Data entry mode
+ * @return HAL status
+ */
 HAL_StatusTypeDef SSD1680_DataEntryMode(SSD1680_HandleTypeDef *hepd, const enum SSD1680_DataEntryMode mode) {
   return SSD1680_Send(hepd, SSD1680_DATA_ENTRY_MODE, &mode, sizeof(mode));   // 0x11
 }
 
+/**
+ * @brief Get gate (row) scan range for refresh operation
+ * @details Set the range of rows to be updated on next refresh
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] top: topmost row to be updated
+ * @param[in] height: number of rows to be updated
+ * @return HAL status
+ */
 HAL_StatusTypeDef SSD1680_GateScanRange(SSD1680_HandleTypeDef *hepd, const uint16_t top, const uint16_t height) {
   HAL_StatusTypeDef status = HAL_OK;
   if ((status = SSD1680_Send(hepd, SSD1680_GATE_SCAN_START, (uint8_t *)&top, sizeof(top))))  // 0x0F
@@ -190,6 +287,19 @@ HAL_StatusTypeDef SSD1680_GateScanRange(SSD1680_HandleTypeDef *hepd, const uint1
   return SSD1680_Send(hepd, SSD1680_GATE_SCAN, (uint8_t *)&gateScan, sizeof(gateScan));     // 0x01
 }
 
+/**
+ * @brief Set horizontal RAM range
+ * @details Set the range outside of which the X (horizontal) address counter will wrap around.
+ * Useful when sending a sprite to avoid issuing extra address setting commands.
+ * The Y address counter will also increment or decrement depending on data entry mode.
+ * Intended to use together with SSD1680_DataEntryMode and SSD1680_RAMYRange.
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] left: start of the range. Must be multiple of 8.
+ * @param[in] width: width of the range. Must be multiple of 8.
+ * @return HAL status
+ * @see SSD1680_SSD1680_DataEntryMode
+ * @see SSD1680_RAMYRange
+ */
 HAL_StatusTypeDef SSD1680_RAMXRange(SSD1680_HandleTypeDef *hepd, const uint8_t left, const uint8_t width) {
   if (left % 8 + width % 8)
     return HAL_ERROR;
@@ -197,11 +307,31 @@ HAL_StatusTypeDef SSD1680_RAMXRange(SSD1680_HandleTypeDef *hepd, const uint8_t l
   return SSD1680_Send(hepd, SSD1680_RAM_X_RANGE, ramXRange, sizeof(ramXRange));   // 0x44
 }
 
+/**
+ * @brief Set vertical RAM range
+ * @details Set the range outside of which the Y (vertical) address counter will wrap around.
+ * Useful when sending a sprite to avoid issuing extra address setting commands.
+ * The X address counter will also increment or decrement depending on data entry mode.
+ * Intended to use together with SSD1680_DataEntryMode and SSD1680_RAMXRange.
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] top: start of the range.
+ * @param[in] height: height of the range.
+ * @return HAL status
+ * @see SSD1680_SSD1680_DataEntryMode
+ * @see SSD1680_RAMXRange
+ */
 HAL_StatusTypeDef SSD1680_RAMYRange(SSD1680_HandleTypeDef *hepd, const uint16_t top, const uint16_t height) {
   const uint16_t ramYRange[] = { top, (top + height) - 1};
   return SSD1680_Send(hepd, SSD1680_RAM_Y_RANGE, (uint8_t *)ramYRange, sizeof(ramYRange));   // 0x45
 }
 
+/**
+ * @brief Send update control sequence 1.
+ * @details Not intended to be used outside of SSD1680_Refresh
+ * @param[in] hepd: SSD1680 handle pointer
+ * @return HAL status
+ * @see SSD1680_Refresh
+ */
 HAL_StatusTypeDef SSD1680_UpdateControl1(SSD1680_HandleTypeDef *hepd) {
   const uint8_t inverseR = 0;
   const uint8_t bypassR = hepd->Color_Depth & 0x01;
@@ -224,11 +354,24 @@ HAL_StatusTypeDef SSD1680_UpdateControl1(SSD1680_HandleTypeDef *hepd) {
   return SSD1680_Send(hepd, SSD1680_UPDATE_CONTROL_1, (uint8_t *)&updateControl1, sizeof(updateControl1));  // 0x21
 }
 
+/**
+ * @brief Send update control sequence 2.
+ * @details Not intended to be used outside of SSD1680_Refresh
+ * @param[in] hepd: SSD1680 handle pointer
+ * @return HAL status
+ * @see SSD1680_Refresh
+ */
 HAL_StatusTypeDef SSD1680_UpdateControl2(SSD1680_HandleTypeDef *hepd) {
-  const uint8_t updateControl2[] = { 0xF7 }; // See datasheet page 26
+  const uint8_t updateControl2[] = { 0xF7 }; /* See datasheet page 26 */
   return SSD1680_Send(hepd, SSD1680_UPDATE_CONTROL_2, updateControl2, sizeof(updateControl2));  // 0x22
 }
 
+/**
+ * @brief Set border color
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] color: border color
+ * @return HAL status
+ */
 HAL_StatusTypeDef SSD1680_Border(SSD1680_HandleTypeDef *hepd, const enum SSD1680_Color color) {
 #pragma pack(push, 1)
   const struct {
@@ -242,10 +385,26 @@ HAL_StatusTypeDef SSD1680_Border(SSD1680_HandleTypeDef *hepd, const enum SSD1680
   return SSD1680_Send(hepd, SSD1680_BORDER, (uint8_t *)&border, sizeof(border));
 }
 
+/**
+ * @brief Set RAM bank for read
+ * @details Sets the RAM bank for the next RAM read operation.
+ * Not intended to use outside of SSD1680_GetRegion.
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] ram: RAM bank
+ * @return HAL status
+ */
 HAL_StatusTypeDef SSD1680_RAMReadOption(SSD1680_HandleTypeDef *hepd, const enum SSD1680_RAMBank ram) {
   return SSD1680_Send(hepd, SSD1680_RAM_READ_OPT, (uint8_t *)&ram, 1);
 }
 
+/**
+ * @brief Read temperature
+ * @details Reads temperature from internal sensor.
+ * @param[in] hepd: SSD1680 handle pointer
+ * @return Temperature
+ * @note Return value is not surrounding air temperature but the temperature of display itself.
+ * Pretty inaccurate relative to dedicated sensor chips.
+ */
 uint16_t SSD1680_ReadTemp(SSD1680_HandleTypeDef *hepd) {
   const uint8_t tempSensor[] = { 0x80 };
   SSD1680_Send(hepd, SSD1680_SELECT_TEMP_SENSOR, tempSensor, sizeof(tempSensor));   // 0x18
@@ -254,6 +413,16 @@ uint16_t SSD1680_ReadTemp(SSD1680_HandleTypeDef *hepd) {
   return temp >> 4;
 }
 
+
+/**
+ * @brief Reset both horizontal and vertical RAM ranges
+ * @details Sets both horizontal and vertical RAM ranges to the actual display size.
+ * Useful when updating whole screen after sending sprite with SSD1680_SetRegion
+ * @param[in] hepd: SSD1680 handle pointer
+ * @return HAL status
+ * @see SSD1680_RAMXRange
+ * @see SSD1680_RAMYRange
+ */
 HAL_StatusTypeDef SSD1680_ResetRange(SSD1680_HandleTypeDef *hepd) {
   HAL_StatusTypeDef status = HAL_OK;
   if ((status = SSD1680_RAMXRange(hepd, 0, hepd->Resolution_X / 8)))
@@ -263,6 +432,16 @@ HAL_StatusTypeDef SSD1680_ResetRange(SSD1680_HandleTypeDef *hepd) {
   return status;
 }
 
+/**
+ * @brief Set RAM start address for bulk data transfer
+ * @details Sets both horizontal and vertical address counters before bult data transfer.
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] x: column. Must be multiple of 8.
+ * @param[in] y: row
+ * @return HAL status
+ * @see SSD1680_GetRegion
+ * @see SSD1680_SetRegion
+ */
 HAL_StatusTypeDef SSD1680_StartAddress(SSD1680_HandleTypeDef *hepd, const uint8_t x, const uint16_t y) {
   if (x % 8)
     return HAL_ERROR;
@@ -275,6 +454,23 @@ HAL_StatusTypeDef SSD1680_StartAddress(SSD1680_HandleTypeDef *hepd, const uint8_
   return status;
 }
 
+/**
+ * @brief Bulk read data from RAM
+ * @details Reads data from RAM region with specified location and dimensions.
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] left: leftmost column. Must be multiple of 8.
+ * @param[in] top: topmost row
+ * @param[in] width: region width. Must be multiple of 8.
+ * @param[in] height: region height.
+ * @param[out] data_k: pointer to buffer where to store data from primary (black) RAM bank.
+ * Buffer must be at least `width / 8 * height` bytes.
+ * Set to NULL to skip reading from primary RAM bank.
+ * @param[out] data_r: pointer to buffer where to stora data from secondary (red) RAM bank.
+ * Set to NULL to skip reading from secondary RAM bank.
+ * Buffer must be at least `width / 8 * height` bytes.
+ * @return HAL status
+ * @see SSD1680_SetRegion
+ */
 HAL_StatusTypeDef SSD1680_GetRegion(SSD1680_HandleTypeDef *hepd, const uint8_t left, const uint16_t top, const uint8_t width, const uint16_t height, uint8_t *data_k, uint8_t *data_r) {
   HAL_StatusTypeDef status = HAL_OK;
   if ((status = SSD1680_RAMXRange(hepd, left, width)))
@@ -321,6 +517,23 @@ exit_GetRegion:
 
 }
 
+/**
+ * @brief Bulk write data to RAM
+ * @details Writes data to RAM region with specified location and dimensions.
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] left: leftmost column. Must be multiple of 8.
+ * @param[in] top: topmost row
+ * @param[in] width: region width. Must be multiple of 8.
+ * @param[in] height: region height.
+ * @param[in] data_k: pointer to buffer where data for primary (black) RAM bank is stored.
+ * Buffer must be at least `width / 8 * height` bytes.
+ * Set to NULL to skip updating primary RAM bank.
+ * @param[in] data_r: pointer to buffer where data for secondary (red) RAM bank is stored.
+ * Buffer must be at least `width / 8 * height` bytes.
+ * Set to NULL to skip updating secondary RAM bank.
+ * @return HAL status
+ * @see SSD1680_GetRegion
+ */
 HAL_StatusTypeDef SSD1680_SetRegion(SSD1680_HandleTypeDef *hepd, const uint8_t left, const uint16_t top, const uint8_t width, const uint16_t height, const uint8_t *data_k, const uint8_t *data_r) {
   HAL_StatusTypeDef status = HAL_OK;
   if ((status = SSD1680_RAMXRange(hepd, left, width)))
@@ -343,6 +556,22 @@ HAL_StatusTypeDef SSD1680_SetRegion(SSD1680_HandleTypeDef *hepd, const uint8_t l
   return status;
 }
 
+/**
+ * @brief Put a text a screen horizontally
+ * @details Prints a string at specified position with specified font.
+ * Partially supports the following control characters:
+ * @li `0x08` Backspace
+ * @li `0x09` Tab
+ * @li `0x0A` Line feed
+ * @li `0x0D` Carriage return
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] left: horizontal position of a string
+ * @param[in] top: vertical position of a string
+ * @param[in] string: zero-terminated string to print
+ * @param[in] font: pointer to font
+ * @return HAL status
+ * @bug Overflowing screen causes text to be highly distorted.
+ */
 HAL_StatusTypeDef SSD1680_Text(SSD1680_HandleTypeDef *hepd, const uint8_t left, const uint16_t top, const char *string, const SSD1680_FontTypeDef *font) {
   const uint8_t tab_width = 4;
   const uint8_t glyphSize = font->width / 8 * font->height;
@@ -381,6 +610,23 @@ HAL_StatusTypeDef SSD1680_Text(SSD1680_HandleTypeDef *hepd, const uint8_t left, 
   return HAL_OK;
 }
 
+/**
+ * @brief Put a text a screen vertically
+ * @details Prints a string at specified position with specified font.
+ * Intended to be used with special fonts with glyphs turned 90 degrees clockwise (i.e. like cp866_8x8_r or cp866_8x16_r)
+ * Partially supports the following control characters:
+ * @li `0x08` Backspace
+ * @li `0x09` Tab
+ * @li `0x0A` Line feed
+ * @li `0x0D` Carriage return
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] left: horizontal position of a string
+ * @param[in] top: vertical position of a string
+ * @param[in] string: zero-terminated string to print
+ * @param[in] font: pointer to font
+ * @return HAL status
+ * @bug Overflowing screen causes text to be highly distorted.
+ */
 HAL_StatusTypeDef SSD1680_VerticalText(SSD1680_HandleTypeDef *hepd, const uint8_t left, const uint16_t top, const char *string, const SSD1680_FontTypeDef *font) {
   const uint8_t tab_width = 4;
   const uint8_t glyphSize = font->width / 8 * font->height;
@@ -419,6 +665,7 @@ HAL_StatusTypeDef SSD1680_VerticalText(SSD1680_HandleTypeDef *hepd, const uint8_
   return HAL_OK;
 }
 
+/*
 void ByteGridTranspose(uint8_t *out, const uint16_t width, const uint16_t height, const uint8_t *in) {
   for (uint16_t y = 0; y < height; ++y)
     for (uint16_t x = 0; x < width; ++x) {
@@ -428,3 +675,4 @@ void ByteGridTranspose(uint8_t *out, const uint16_t width, const uint16_t height
         out[oB] = out[oB] | (((in[iB] >> (7 - x % 8)) & 1) <<  (0 + y % 8));
     }
 }
+*/
