@@ -38,6 +38,8 @@
 #define SSD1680_RAM_Y 0x4F
 #define SSD1680_NOP 0x7F
 
+//#define SSD1680_INT_WAIT
+
 /**
  * @enum SSD1680_Color
  * @brief Defines color

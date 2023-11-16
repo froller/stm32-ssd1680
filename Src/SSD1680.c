@@ -94,8 +94,25 @@ void SSD1680_Init(SSD1680_HandleTypeDef *hepd) {
  * @param[in] hepd: SSD1680 handle pointer
  */
 void SSD1680_Wait(SSD1680_HandleTypeDef *hepd) {
+#if defined(SSD1680_INT_WAIT)
+#if defined(DEBUG)
+  if (hepd->LED_Port)
+    HAL_GPIO_WritePin(hepd->LED_Port, hepd->LED_Pin, GPIO_PIN_RESET);
+#endif
+  while (HAL_GPIO_ReadPin(hepd->BUSY_Port, hepd->BUSY_Pin) == GPIO_PIN_SET)
+  {
+    HAL_SuspendTick();
+    HAL_PWR_EnterSLEEPMode(PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI);
+    HAL_ResumeTick();
+  }
+#if defined(DEBUG)
+  if (hepd->LED_Port)
+    HAL_GPIO_WritePin(hepd->LED_Port, hepd->LED_Pin, GPIO_PIN_SET);
+#endif
+#else
   while (HAL_GPIO_ReadPin(hepd->BUSY_Port, hepd->BUSY_Pin) == GPIO_PIN_SET)
     HAL_Delay(2);
+#endif
 }
 
 /**
