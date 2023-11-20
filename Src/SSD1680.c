@@ -71,16 +71,37 @@ void SSD1680_Init(SSD1680_HandleTypeDef *hepd) {
   //SSD1680_Send(&hepd, SSD1680_SOURCE_VOLTAGE, sourceVoltage, sizeof(sourceVoltage));  // 0x04
   //const uint8_t vcomVoltage[] = { 0x38 };
   //SSD1680_Send(&hepd, SSD1680_VCOM_VOLTAGE, vcomVoltage, sizeof(vcomVoltage));  // 0x2C
+
   SSD1680_GateScanRange(hepd, 0, hepd->Resolution_Y);
-  SSD1680_UpdateControl1(hepd);
-  SSD1680_UpdateControl2(hepd);
+  SSD1680_UpdateControl(hepd);
 
   /***** #4 *****/
   SSD1680_DataEntryMode(hepd, RightThenDown);
 
   /***** #5 *****/
+  /* Use SD1680 internal temperature sensor */
+/*
   const uint8_t tempSensor[] = { 0x80 };
   SSD1680_Send(hepd, SSD1680_SELECT_TEMP_SENSOR, tempSensor, sizeof(tempSensor));    // 0x18
+*/
+
+  /* Load temperature value */
+/*
+  const uint8_t loadTemp[] = { 0xB1 };
+  SSD1680_Send(hepd, SSD1680_UPDATE_CONTROL_2, loadTemp, sizeof(loadTemp));	// 0x22
+  SSD1680_Send(hepd, SSD1680_MASTER_ACTIVATION, NULL, 0);	// 0x20
+  SSD1680_Wait(hepd);
+*/
+
+  /* Write temperature register */
+  const uint8_t temp[] = { 0x64 };
+  SSD1680_Send(hepd, SSD1680_WRITE_TEMP, temp, sizeof(temp)); // 0x1A
+
+  /* Load temperature value */
+  const uint8_t temp2[] = { 0x91 };
+  SSD1680_Send(hepd, SSD1680_UPDATE_CONTROL_2, temp2, sizeof(temp2));	// 0x22
+  SSD1680_Send(hepd, SSD1680_MASTER_ACTIVATION, NULL, 0);	// 0x20
+  SSD1680_Wait(hepd);
 
 #if defined(DEBUG)
   if (hepd->LED_Port)
@@ -239,16 +260,17 @@ HAL_StatusTypeDef SSD1680_RAMFill(SSD1680_HandleTypeDef *hepd, const enum SSD168
  * @brief Update the display
  * @details Start update sequence to show internal memory content on the display.
  * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] mode: Refresh mode
  * @return HAL status
- * @note Slow. Takes half to several seconds depending on display model.
+ * @note Slow. Waits for display to complete operation.
  */
-HAL_StatusTypeDef SSD1680_Refresh(SSD1680_HandleTypeDef *hepd) {
+HAL_StatusTypeDef SSD1680_Refresh(SSD1680_HandleTypeDef *hepd, const enum SSD1680_RefreshMode mode) {
   HAL_StatusTypeDef status = HAL_OK;
   const uint8_t boosterSoftStart[] = { 0x80, 0x90, 0x90, 0x00 };
   if ((status = SSD1680_Send(hepd, SSD1680_BOOSTER_SOFT_START, boosterSoftStart, sizeof(boosterSoftStart))))    // 0x0C
     return status;
-  if ((status = SSD1680_UpdateControl2(hepd))) // 0x22
-    return status;
+  if ((status = SSD1680_Send(hepd, SSD1680_UPDATE_CONTROL_2, &mode, sizeof(mode))))	// 0x22
+	  return status;
   if ((status = SSD1680_Send(hepd, SSD1680_MASTER_ACTIVATION, 0, 0)))   // 0x20
     return status;
   SSD1680_Wait(hepd);
@@ -332,7 +354,7 @@ HAL_StatusTypeDef SSD1680_RAMYRange(SSD1680_HandleTypeDef *hepd, const uint16_t 
  * @return HAL status
  * @see SSD1680_Refresh
  */
-HAL_StatusTypeDef SSD1680_UpdateControl1(SSD1680_HandleTypeDef *hepd) {
+HAL_StatusTypeDef SSD1680_UpdateControl(SSD1680_HandleTypeDef *hepd) {
   const uint8_t inverseR = 0;
   const uint8_t bypassR = hepd->Color_Depth & 0x01;
   const uint8_t inverseK = 0;
@@ -352,18 +374,6 @@ HAL_StatusTypeDef SSD1680_UpdateControl1(SSD1680_HandleTypeDef *hepd) {
   } updateControl1 = { 0, bypassK, inverseK, 0, bypassR, inverseR, 0, hepd->Scan_Mode };
 #pragma pack(pop)
   return SSD1680_Send(hepd, SSD1680_UPDATE_CONTROL_1, (uint8_t *)&updateControl1, sizeof(updateControl1));  // 0x21
-}
-
-/**
- * @brief Send update control sequence 2.
- * @details Not intended to be used outside of SSD1680_Refresh
- * @param[in] hepd: SSD1680 handle pointer
- * @return HAL status
- * @see SSD1680_Refresh
- */
-HAL_StatusTypeDef SSD1680_UpdateControl2(SSD1680_HandleTypeDef *hepd) {
-  const uint8_t updateControl2[] = { 0xF7 }; /* See datasheet page 26 */
-  return SSD1680_Send(hepd, SSD1680_UPDATE_CONTROL_2, updateControl2, sizeof(updateControl2));  // 0x22
 }
 
 /**

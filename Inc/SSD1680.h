@@ -19,6 +19,7 @@
 #define SSD1680_DATA_ENTRY_MODE 0x11
 #define SSD1680_SW_RESET 0x12
 #define SSD1680_SELECT_TEMP_SENSOR 0x18
+#define SSD1680_WRITE_TEMP 0x1A
 #define SSD1680_READ_TEMP 0x1B
 #define SSD1680_MASTER_ACTIVATION 0x20
 #define SSD1680_UPDATE_CONTROL_1 0x21
@@ -114,6 +115,17 @@ enum SSD1680_DataEntryMode {
 };
 
 /**
+ * @enum SSD1680_RefreshMode
+ * @brief Display refresh mode
+ */
+enum SSD1680_RefreshMode {
+  FullRefresh = 0xF7,		/**< Refresh whole screen in a slow robust flickery way */
+  PartialRefresh = 0xFF,	/**< Refresh updated region in a slow robust flickery way */
+  FastFullRefresh = 0xC7,	/**< Refresh whole screen in a fast way */
+  FastPartialRefresh = 0xCF	/**< Refresh updated region in a fast way */
+};
+
+/**
  * @struct SSD1680_HandleTypeDef
  * SSD1680 handle
  */
@@ -150,13 +162,12 @@ HAL_StatusTypeDef SSD1680_Receive(SSD1680_HandleTypeDef *hepd, const uint8_t com
 HAL_StatusTypeDef SSD1680_Clear(SSD1680_HandleTypeDef *hepd, const enum SSD1680_Color color);
 HAL_StatusTypeDef SSD1680_Checker(SSD1680_HandleTypeDef *hepd);
 HAL_StatusTypeDef SSD1680_RAMFill(SSD1680_HandleTypeDef *hepd, const enum SSD1680_Pattern kx, const enum SSD1680_Pattern ky, const enum SSD1680_Pattern rx, const enum SSD1680_Pattern ry, const enum SSD1680_Color color);
-HAL_StatusTypeDef SSD1680_Refresh(SSD1680_HandleTypeDef *hepd);
+HAL_StatusTypeDef SSD1680_Refresh(SSD1680_HandleTypeDef *hepd, const enum SSD1680_RefreshMode mode);
 HAL_StatusTypeDef SSD1680_DataEntryMode(SSD1680_HandleTypeDef *hepd, const enum SSD1680_DataEntryMode mode);
 HAL_StatusTypeDef SSD1680_GateScanRange(SSD1680_HandleTypeDef *hepd, const uint16_t top, const uint16_t height);
 HAL_StatusTypeDef SSD1680_RAMXRange(SSD1680_HandleTypeDef *hepd, const uint8_t left, const uint8_t width);
 HAL_StatusTypeDef SSD1680_RAMYRange(SSD1680_HandleTypeDef *hepd, const uint16_t top, const uint16_t height);
-HAL_StatusTypeDef SSD1680_UpdateControl1(SSD1680_HandleTypeDef *hepd);
-HAL_StatusTypeDef SSD1680_UpdateControl2(SSD1680_HandleTypeDef *hepd);
+HAL_StatusTypeDef SSD1680_UpdateControl(SSD1680_HandleTypeDef *hepd);
 HAL_StatusTypeDef SSD1680_Border(SSD1680_HandleTypeDef *hepd, const enum SSD1680_Color color);
 HAL_StatusTypeDef SSD1680_RAMReadOption(SSD1680_HandleTypeDef *hepd, const enum SSD1680_RAMBank ram);
 uint16_t SSD1680_ReadTemp(SSD1680_HandleTypeDef *hepd);

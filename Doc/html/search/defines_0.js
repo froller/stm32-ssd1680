@@ -26,5 +26,6 @@ var searchData=
   ['ssd1680_5fupdate_5fcontrol_5f2_23',['SSD1680_UPDATE_CONTROL_2',['../d6/d24/SSD1680_8h.html#ab204e67cdd788c71aa789e395402bf59',1,'SSD1680.h']]],
   ['ssd1680_5fvcom_5fvoltage_24',['SSD1680_VCOM_VOLTAGE',['../d6/d24/SSD1680_8h.html#a781d92f8b749402f27352f9c0d88ae2f',1,'SSD1680.h']]],
   ['ssd1680_5fwrite_5fblack_25',['SSD1680_WRITE_BLACK',['../d6/d24/SSD1680_8h.html#ade338e3e2884b13e6f778004f545d277',1,'SSD1680.h']]],
-  ['ssd1680_5fwrite_5fred_26',['SSD1680_WRITE_RED',['../d6/d24/SSD1680_8h.html#a9f8d66f68525809e25d0b7bccd017758',1,'SSD1680.h']]]
+  ['ssd1680_5fwrite_5fred_26',['SSD1680_WRITE_RED',['../d6/d24/SSD1680_8h.html#a9f8d66f68525809e25d0b7bccd017758',1,'SSD1680.h']]],
+  ['ssd1680_5fwrite_5ftemp_27',['SSD1680_WRITE_TEMP',['../d6/d24/SSD1680_8h.html#ac7fa77e48f9af5268266a7c56a750664',1,'SSD1680.h']]]
 ];
