@@ -22,94 +22,6 @@ void SSD1680_Reset(SSD1680_HandleTypeDef *hepd) {
 }
 
 /**
- * @brief Initialize the display
- * @details
- * @li Reset the disply
- * @li Send initialization sequence
- * @li Set source and gate scan ranges to maximum resolution
- * @li Enable internal temperature sensor
- * @li Setup voltage sources
- * @li Set data entry mode to @ref RightThenDown
- * @param[in] hepd: SSD1680 handle pointer
- */
-void SSD1680_Init(SSD1680_HandleTypeDef *hepd) {
-  HAL_GPIO_WritePin(hepd->RESET_Port, hepd->RESET_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(hepd->CS_Port, hepd->CS_Pin, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(hepd->DC_Port, hepd->DC_Pin, GPIO_PIN_SET);
-  HAL_Delay(2);
-  HAL_GPIO_WritePin(hepd->RESET_Port, hepd->RESET_Pin, GPIO_PIN_SET);
-  HAL_Delay(20);
-
-  /*
-   _START_SEQUENCE = (
-      b"\x12\x80\x14"  # soft reset and wait 20ms
-      b"\x11\x01\x03"  # Ram data entry mode
-      b"\x3C\x01\x05"  # border color
-      b"\x2c\x01\x36"  # Set vcom voltage
-      b"\x03\x01\x17"  # Set gate voltage
-      b"\x04\x03\x41\x00\x32"  # Set source voltage
-      b"\x4e\x01\x01"  # ram x count
-      b"\x4f\x02\x00\x00"  # ram y count
-      b"\x01\x03\x00\x00\x00"  # set display size
-      b"\x22\x01\xf4"  # display update mode
-  )
-  */
-
-  /***** #2 *****/
-  SSD1680_Reset(hepd);
-  SSD1680_Send(hepd, SSD1680_SW_RESET, 0, 0);
-  SSD1680_Wait(hepd);
-
-  uint8_t userId[10] = { 0 };
-  SSD1680_Receive(hepd, SSD1680_READ_USER_ID, userId, sizeof(userId)); // 0x2E
-
-  /***** #3 *****/
-
-  //const uint8_t gateVoltage[] = { 0x00 };
-  //SSD1680_Send(&hepd, SSD1680_GATE_VOLTAGE, gateVoltage, sizeof(gateVoltage));  // 0x03
-  //const uint8_t sourceVoltage[] = { 0x41, 0x48, 0x32 };
-  //SSD1680_Send(&hepd, SSD1680_SOURCE_VOLTAGE, sourceVoltage, sizeof(sourceVoltage));  // 0x04
-  //const uint8_t vcomVoltage[] = { 0x38 };
-  //SSD1680_Send(&hepd, SSD1680_VCOM_VOLTAGE, vcomVoltage, sizeof(vcomVoltage));  // 0x2C
-
-  SSD1680_GateScanRange(hepd, 0, hepd->Resolution_Y);
-  SSD1680_UpdateControl(hepd);
-
-  /***** #4 *****/
-  SSD1680_DataEntryMode(hepd, RightThenDown);
-
-  /***** #5 *****/
-  /* Use SD1680 internal temperature sensor */
-/*
-  const uint8_t tempSensor[] = { 0x80 };
-  SSD1680_Send(hepd, SSD1680_SELECT_TEMP_SENSOR, tempSensor, sizeof(tempSensor));    // 0x18
-*/
-
-  /* Load temperature value */
-/*
-  const uint8_t loadTemp[] = { 0xB1 };
-  SSD1680_Send(hepd, SSD1680_UPDATE_CONTROL_2, loadTemp, sizeof(loadTemp));	// 0x22
-  SSD1680_Send(hepd, SSD1680_MASTER_ACTIVATION, NULL, 0);	// 0x20
-  SSD1680_Wait(hepd);
-*/
-
-  /* Write temperature register */
-  const uint8_t temp[] = { 0x64 };
-  SSD1680_Send(hepd, SSD1680_WRITE_TEMP, temp, sizeof(temp)); // 0x1A
-
-  /* Load temperature value */
-  const uint8_t temp2[] = { 0x91 };
-  SSD1680_Send(hepd, SSD1680_UPDATE_CONTROL_2, temp2, sizeof(temp2));	// 0x22
-  SSD1680_Send(hepd, SSD1680_MASTER_ACTIVATION, NULL, 0);	// 0x20
-  SSD1680_Wait(hepd);
-
-#if defined(DEBUG)
-  if (hepd->LED_Port)
-    HAL_GPIO_WritePin(hepd->LED_Port, hepd->LED_Pin, GPIO_PIN_SET);
-#endif // DEBUG
-}
-
-/**
  * @brief Wait for display ready
  * @details Waits for BUSY line to become low. Spins with 2ms delay while not yet.
  * @param[in] hepd: SSD1680 handle pointer
@@ -203,92 +115,6 @@ HAL_StatusTypeDef SSD1680_Receive(SSD1680_HandleTypeDef *hepd, const uint8_t com
 }
 
 /**
- * @brief Clears the screen
- * @details Fills the screen with specified solid color
- * @param[in] hepd: SSD1680 handle pointer
- * @param[in] color: color to fill the screen
- * @return HAL status
- * @note Slow. Waits for display ready.
- */
-HAL_StatusTypeDef SSD1680_Clear(SSD1680_HandleTypeDef *hepd, const enum SSD1680_Color color) {
-  return SSD1680_RAMFill(hepd, PatternSolid, PatternSolid, PatternSolid, PatternSolid, color);
-}
-
-/**
- * @brief Shows checker pattern
- * @details Fills the screen with checker pattern 16x16 for primary (black) color and 8x8 for secondary (red) color.
- * @param[in] hepd: SSD1680 handle pointer
- * @return HAL status
- * @note Slow. Waits for display ready.
- * @see SSD1680_RAMFill for custom patterns
- */
-HAL_StatusTypeDef SSD1680_Checker(SSD1680_HandleTypeDef *hepd) {
-  return SSD1680_RAMFill(hepd, Pattern16, Pattern16, Pattern8, Pattern8, ColorAnotherRed);
-}
-
-/**
- * @brief Shows checker pattern
- * @details Fills the screen with checker pattern with specified strides for primary and secondary colors.
- * @param[in] hepd: SSD1680 handle pointer
- * @param[in] kx: horizontal stride for primary color
- * @param[in] ky: vertical stride for primary color
- * @param[in] rx: horizontal stride for secondary color
- * @param[in] ry: vertical stride for secondary color
- * @param[in] color: color of the top-left pixel
- * @return HAL status
- * @note Slow. Waits for display ready.
- * @see SSD1680_Checker for common test pattern
- */
-HAL_StatusTypeDef SSD1680_RAMFill(SSD1680_HandleTypeDef *hepd, const enum SSD1680_Pattern kx, const enum SSD1680_Pattern ky, const enum SSD1680_Pattern rx, const enum SSD1680_Pattern ry, const enum SSD1680_Color color) {
-  HAL_StatusTypeDef status = HAL_OK;
-  if ((status = SSD1680_RAMXRange(hepd, 0, hepd->Resolution_X)))
-    return status;
-  if ((status = SSD1680_RAMYRange(hepd, 0, hepd->Resolution_Y)))
-    return status;
-  uint8_t pattern = (ky << 4) | kx | ((color & 1) << 7);
-  if ((status = SSD1680_Send(hepd, SSD1680_PATTERN_BLACK, &pattern, sizeof(pattern))))  // 0x47
-    return status;
-  SSD1680_Wait(hepd);
-  pattern = (ry << 4) | rx | ((color & 2) << 6);
-  if ((status = SSD1680_Send(hepd, SSD1680_PATTERN_RED, &pattern, sizeof(pattern))))  // 0x46
-    return status;
-  SSD1680_Wait(hepd);
-  return status;
-}
-
-/**
- * @brief Update the display
- * @details Start update sequence to show internal memory content on the display.
- * @param[in] hepd: SSD1680 handle pointer
- * @param[in] mode: Refresh mode
- * @return HAL status
- * @note Slow. Waits for display to complete operation.
- */
-HAL_StatusTypeDef SSD1680_Refresh(SSD1680_HandleTypeDef *hepd, const enum SSD1680_RefreshMode mode) {
-  HAL_StatusTypeDef status = HAL_OK;
-  const uint8_t boosterSoftStart[] = { 0x80, 0x90, 0x90, 0x00 };
-  if ((status = SSD1680_Send(hepd, SSD1680_BOOSTER_SOFT_START, boosterSoftStart, sizeof(boosterSoftStart))))    // 0x0C
-    return status;
-  if ((status = SSD1680_Send(hepd, SSD1680_UPDATE_CONTROL_2, &mode, sizeof(mode))))	// 0x22
-	  return status;
-  if ((status = SSD1680_Send(hepd, SSD1680_MASTER_ACTIVATION, 0, 0)))   // 0x20
-    return status;
-  SSD1680_Wait(hepd);
-  return status;
-}
-
-/**
- * @brief Set data entry mode
- * @details Set behavior of address pointer on bulk data transfer into or out of RAM
- * @param[in] hepd: SSD1680 handle pointer
- * @param[in] mode: Data entry mode
- * @return HAL status
- */
-HAL_StatusTypeDef SSD1680_DataEntryMode(SSD1680_HandleTypeDef *hepd, const enum SSD1680_DataEntryMode mode) {
-  return SSD1680_Send(hepd, SSD1680_DATA_ENTRY_MODE, &mode, sizeof(mode));   // 0x11
-}
-
-/**
  * @brief Get gate (row) scan range for refresh operation
  * @details Set the range of rows to be updated on next refresh
  * @param[in] hepd: SSD1680 handle pointer
@@ -307,6 +133,134 @@ HAL_StatusTypeDef SSD1680_GateScanRange(SSD1680_HandleTypeDef *hepd, const uint1
   } gateScan = { height, 0 };
 #pragma pack(pop)
   return SSD1680_Send(hepd, SSD1680_GATE_SCAN, (uint8_t *)&gateScan, sizeof(gateScan));     // 0x01
+}
+
+/**
+ * @brief Set data entry mode
+ * @details Set behavior of address pointer on bulk data transfer into or out of RAM
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] mode: Data entry mode
+ * @return HAL status
+ */
+HAL_StatusTypeDef SSD1680_DataEntryMode(SSD1680_HandleTypeDef *hepd, const enum SSD1680_DataEntryMode mode) {
+  return SSD1680_Send(hepd, SSD1680_DATA_ENTRY_MODE, &mode, sizeof(mode));   // 0x11
+}
+
+/**
+ * @brief Send update control sequence 1.
+ * @details Not intended to be used outside of SSD1680_Refresh
+ * @param[in] hepd: SSD1680 handle pointer
+ * @return HAL status
+ * @see SSD1680_Refresh
+ */
+HAL_StatusTypeDef SSD1680_UpdateControl(SSD1680_HandleTypeDef *hepd) {
+  const uint8_t inverseR = 0;
+  const uint8_t bypassR = hepd->Color_Depth & 0x01;
+  const uint8_t inverseK = 0;
+  const uint8_t bypassK = 0;
+#pragma pack(push, 1)
+  const struct {
+    // LSB
+    uint8_t reserved1:2;
+    uint8_t bypassK:1;
+    uint8_t inverseK:1;
+    uint8_t reserved2:2;
+    uint8_t bypassR:1;
+    uint8_t inverseR:1;
+    // MSB
+    uint8_t reserved0:7;
+    uint8_t sourceMode:1;
+  } updateControl1 = { 0, bypassK, inverseK, 0, bypassR, inverseR, 0, hepd->Scan_Mode };
+#pragma pack(pop)
+  return SSD1680_Send(hepd, SSD1680_UPDATE_CONTROL_1, (uint8_t *)&updateControl1, sizeof(updateControl1));  // 0x21
+}
+
+/**
+ * @brief Initialize the display
+ * @details
+ * @li Reset the disply
+ * @li Send initialization sequence
+ * @li Set source and gate scan ranges to maximum resolution
+ * @li Enable internal temperature sensor
+ * @li Setup voltage sources
+ * @li Set data entry mode to @ref RightThenDown
+ * @param[in] hepd: SSD1680 handle pointer
+ */
+void SSD1680_Init(SSD1680_HandleTypeDef *hepd) {
+  HAL_GPIO_WritePin(hepd->RESET_Port, hepd->RESET_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(hepd->CS_Port, hepd->CS_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(hepd->DC_Port, hepd->DC_Pin, GPIO_PIN_SET);
+  HAL_Delay(2);
+  HAL_GPIO_WritePin(hepd->RESET_Port, hepd->RESET_Pin, GPIO_PIN_SET);
+  HAL_Delay(20);
+
+  /*
+   _START_SEQUENCE = (
+      b"\x12\x80\x14"  # soft reset and wait 20ms
+      b"\x11\x01\x03"  # Ram data entry mode
+      b"\x3C\x01\x05"  # border color
+      b"\x2c\x01\x36"  # Set vcom voltage
+      b"\x03\x01\x17"  # Set gate voltage
+      b"\x04\x03\x41\x00\x32"  # Set source voltage
+      b"\x4e\x01\x01"  # ram x count
+      b"\x4f\x02\x00\x00"  # ram y count
+      b"\x01\x03\x00\x00\x00"  # set display size
+      b"\x22\x01\xf4"  # display update mode
+  )
+  */
+
+  /***** #2 *****/
+  SSD1680_Reset(hepd);
+  SSD1680_Send(hepd, SSD1680_SW_RESET, 0, 0);
+  SSD1680_Wait(hepd);
+
+  uint8_t userId[10] = { 0 };
+  SSD1680_Receive(hepd, SSD1680_READ_USER_ID, userId, sizeof(userId)); // 0x2E
+
+  /***** #3 *****/
+
+  //const uint8_t gateVoltage[] = { 0x00 };
+  //SSD1680_Send(&hepd, SSD1680_GATE_VOLTAGE, gateVoltage, sizeof(gateVoltage));  // 0x03
+  //const uint8_t sourceVoltage[] = { 0x41, 0x48, 0x32 };
+  //SSD1680_Send(&hepd, SSD1680_SOURCE_VOLTAGE, sourceVoltage, sizeof(sourceVoltage));  // 0x04
+  //const uint8_t vcomVoltage[] = { 0x38 };
+  //SSD1680_Send(&hepd, SSD1680_VCOM_VOLTAGE, vcomVoltage, sizeof(vcomVoltage));  // 0x2C
+
+  SSD1680_GateScanRange(hepd, 0, hepd->Resolution_Y);
+  SSD1680_UpdateControl(hepd);
+
+  /***** #4 *****/
+  SSD1680_DataEntryMode(hepd, RightThenDown);
+
+  /***** #5 *****/
+  /* Use SD1680 internal temperature sensor */
+/*
+  const uint8_t tempSensor[] = { 0x80 };
+  SSD1680_Send(hepd, SSD1680_SELECT_TEMP_SENSOR, tempSensor, sizeof(tempSensor));    // 0x18
+*/
+
+  /* Load temperature value */
+/*
+  const uint8_t loadTemp[] = { 0xB1 };
+  SSD1680_Send(hepd, SSD1680_UPDATE_CONTROL_2, loadTemp, sizeof(loadTemp));	// 0x22
+  SSD1680_Send(hepd, SSD1680_MASTER_ACTIVATION, NULL, 0);	// 0x20
+  SSD1680_Wait(hepd);
+*/
+
+  /* Write temperature register */
+  const uint8_t temp[] = { 0x64 };
+  SSD1680_Send(hepd, SSD1680_WRITE_TEMP, temp, sizeof(temp)); // 0x1A
+
+  /* Load temperature value */
+  const uint8_t temp2[] = { 0x91 };
+  SSD1680_Send(hepd, SSD1680_UPDATE_CONTROL_2, temp2, sizeof(temp2));	// 0x22
+  SSD1680_Send(hepd, SSD1680_MASTER_ACTIVATION, NULL, 0);	// 0x20
+  SSD1680_Wait(hepd);
+
+#if defined(DEBUG)
+  if (hepd->LED_Port)
+    HAL_GPIO_WritePin(hepd->LED_Port, hepd->LED_Pin, GPIO_PIN_SET);
+#endif // DEBUG
 }
 
 /**
@@ -348,32 +302,78 @@ HAL_StatusTypeDef SSD1680_RAMYRange(SSD1680_HandleTypeDef *hepd, const uint16_t 
 }
 
 /**
- * @brief Send update control sequence 1.
- * @details Not intended to be used outside of SSD1680_Refresh
+ * @brief Shows checker pattern
+ * @details Fills the screen with checker pattern with specified strides for primary and secondary colors.
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] kx: horizontal stride for primary color
+ * @param[in] ky: vertical stride for primary color
+ * @param[in] rx: horizontal stride for secondary color
+ * @param[in] ry: vertical stride for secondary color
+ * @param[in] color: color of the top-left pixel
+ * @return HAL status
+ * @note Slow. Waits for display ready.
+ * @see SSD1680_Checker for common test pattern
+ */
+HAL_StatusTypeDef SSD1680_RAMFill(SSD1680_HandleTypeDef *hepd, const enum SSD1680_Pattern kx, const enum SSD1680_Pattern ky, const enum SSD1680_Pattern rx, const enum SSD1680_Pattern ry, const enum SSD1680_Color color) {
+  HAL_StatusTypeDef status = HAL_OK;
+  if ((status = SSD1680_RAMXRange(hepd, 0, hepd->Resolution_X)))
+    return status;
+  if ((status = SSD1680_RAMYRange(hepd, 0, hepd->Resolution_Y)))
+    return status;
+  uint8_t pattern = (ky << 4) | kx | ((color & 1) << 7);
+  if ((status = SSD1680_Send(hepd, SSD1680_PATTERN_BLACK, &pattern, sizeof(pattern))))  // 0x47
+    return status;
+  SSD1680_Wait(hepd);
+  pattern = (ry << 4) | rx | ((color & 2) << 6);
+  if ((status = SSD1680_Send(hepd, SSD1680_PATTERN_RED, &pattern, sizeof(pattern))))  // 0x46
+    return status;
+  SSD1680_Wait(hepd);
+  return status;
+}
+
+/**
+ * @brief Clears the screen
+ * @details Fills the screen with specified solid color
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] color: color to fill the screen
+ * @return HAL status
+ * @note Slow. Waits for display ready.
+ */
+HAL_StatusTypeDef SSD1680_Clear(SSD1680_HandleTypeDef *hepd, const enum SSD1680_Color color) {
+  return SSD1680_RAMFill(hepd, PatternSolid, PatternSolid, PatternSolid, PatternSolid, color);
+}
+
+/**
+ * @brief Shows checker pattern
+ * @details Fills the screen with checker pattern 16x16 for primary (black) color and 8x8 for secondary (red) color.
  * @param[in] hepd: SSD1680 handle pointer
  * @return HAL status
- * @see SSD1680_Refresh
+ * @note Slow. Waits for display ready.
+ * @see SSD1680_RAMFill for custom patterns
  */
-HAL_StatusTypeDef SSD1680_UpdateControl(SSD1680_HandleTypeDef *hepd) {
-  const uint8_t inverseR = 0;
-  const uint8_t bypassR = hepd->Color_Depth & 0x01;
-  const uint8_t inverseK = 0;
-  const uint8_t bypassK = 0;
-#pragma pack(push, 1)
-  const struct {
-    // LSB
-    uint8_t reserved1:2;
-    uint8_t bypassK:1;
-    uint8_t inverseK:1;
-    uint8_t reserved2:2;
-    uint8_t bypassR:1;
-    uint8_t inverseR:1;
-    // MSB
-    uint8_t reserved0:7;
-    uint8_t sourceMode:1;
-  } updateControl1 = { 0, bypassK, inverseK, 0, bypassR, inverseR, 0, hepd->Scan_Mode };
-#pragma pack(pop)
-  return SSD1680_Send(hepd, SSD1680_UPDATE_CONTROL_1, (uint8_t *)&updateControl1, sizeof(updateControl1));  // 0x21
+HAL_StatusTypeDef SSD1680_Checker(SSD1680_HandleTypeDef *hepd) {
+  return SSD1680_RAMFill(hepd, Pattern16, Pattern16, Pattern8, Pattern8, ColorAnotherRed);
+}
+
+/**
+ * @brief Update the display
+ * @details Start update sequence to show internal memory content on the display.
+ * @param[in] hepd: SSD1680 handle pointer
+ * @param[in] mode: Refresh mode
+ * @return HAL status
+ * @note Slow. Waits for display to complete operation.
+ */
+HAL_StatusTypeDef SSD1680_Refresh(SSD1680_HandleTypeDef *hepd, const enum SSD1680_RefreshMode mode) {
+  HAL_StatusTypeDef status = HAL_OK;
+  const uint8_t boosterSoftStart[] = { 0x80, 0x90, 0x90, 0x00 };
+  if ((status = SSD1680_Send(hepd, SSD1680_BOOSTER_SOFT_START, boosterSoftStart, sizeof(boosterSoftStart))))    // 0x0C
+    return status;
+  if ((status = SSD1680_Send(hepd, SSD1680_UPDATE_CONTROL_2, &mode, sizeof(mode))))	// 0x22
+	  return status;
+  if ((status = SSD1680_Send(hepd, SSD1680_MASTER_ACTIVATION, 0, 0)))   // 0x20
+    return status;
+  SSD1680_Wait(hepd);
+  return status;
 }
 
 /**
