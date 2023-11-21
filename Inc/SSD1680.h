@@ -155,27 +155,13 @@ typedef struct {
 // Connectivity
 void SSD1680_Reset(SSD1680_HandleTypeDef *hepd);
 void SSD1680_Init(SSD1680_HandleTypeDef *hepd);
-void SSD1680_Wait(SSD1680_HandleTypeDef *hepd);
-// Low level functions
-HAL_StatusTypeDef SSD1680_Send(SSD1680_HandleTypeDef *hepd, const uint8_t command, const uint8_t *pData, const size_t size);
-HAL_StatusTypeDef SSD1680_Receive(SSD1680_HandleTypeDef *hepd, const uint8_t command, uint8_t *pData, const size_t size);
-HAL_StatusTypeDef SSD1680_Clear(SSD1680_HandleTypeDef *hepd, const enum SSD1680_Color color);
-HAL_StatusTypeDef SSD1680_Checker(SSD1680_HandleTypeDef *hepd);
-HAL_StatusTypeDef SSD1680_RAMFill(SSD1680_HandleTypeDef *hepd, const enum SSD1680_Pattern kx, const enum SSD1680_Pattern ky, const enum SSD1680_Pattern rx, const enum SSD1680_Pattern ry, const enum SSD1680_Color color);
-HAL_StatusTypeDef SSD1680_Refresh(SSD1680_HandleTypeDef *hepd, const enum SSD1680_RefreshMode mode);
-HAL_StatusTypeDef SSD1680_DataEntryMode(SSD1680_HandleTypeDef *hepd, const enum SSD1680_DataEntryMode mode);
-HAL_StatusTypeDef SSD1680_GateScanRange(SSD1680_HandleTypeDef *hepd, const uint16_t top, const uint16_t height);
-HAL_StatusTypeDef SSD1680_RAMXRange(SSD1680_HandleTypeDef *hepd, const uint8_t left, const uint8_t width);
-HAL_StatusTypeDef SSD1680_RAMYRange(SSD1680_HandleTypeDef *hepd, const uint16_t top, const uint16_t height);
-HAL_StatusTypeDef SSD1680_UpdateControl(SSD1680_HandleTypeDef *hepd);
-HAL_StatusTypeDef SSD1680_Border(SSD1680_HandleTypeDef *hepd, const enum SSD1680_Color color);
-HAL_StatusTypeDef SSD1680_RAMReadOption(SSD1680_HandleTypeDef *hepd, const enum SSD1680_RAMBank ram);
-uint16_t SSD1680_ReadTemp(SSD1680_HandleTypeDef *hepd);
-HAL_StatusTypeDef SSD1680_ResetRange(SSD1680_HandleTypeDef *hepd);
-HAL_StatusTypeDef SSD1680_StartAddress(SSD1680_HandleTypeDef *hepd, const uint8_t x, const uint16_t y);
 // High level functions
+HAL_StatusTypeDef SSD1680_Clear(SSD1680_HandleTypeDef *hepd, const enum SSD1680_Color color);
+HAL_StatusTypeDef SSD1680_Refresh(SSD1680_HandleTypeDef *hepd, const enum SSD1680_RefreshMode mode);
+HAL_StatusTypeDef SSD1680_Border(SSD1680_HandleTypeDef *hepd, const enum SSD1680_Color color);
 HAL_StatusTypeDef SSD1680_GetRegion(SSD1680_HandleTypeDef *hepd, const uint8_t left, const uint16_t top, const uint8_t width, const uint16_t height, uint8_t *data_k, uint8_t *data_r);
 HAL_StatusTypeDef SSD1680_SetRegion(SSD1680_HandleTypeDef *hepd, const uint8_t left, const uint16_t top, const uint8_t width, const uint16_t height, const uint8_t *data_k, const uint8_t *data_r);
 HAL_StatusTypeDef SSD1680_Text(SSD1680_HandleTypeDef *hepd, const uint8_t left, const uint16_t top, const char *string, const SSD1680_FontTypeDef *font);
 HAL_StatusTypeDef SSD1680_VerticalText(SSD1680_HandleTypeDef *hepd, const uint8_t left, const uint16_t top, const char *string, const SSD1680_FontTypeDef *font);
+HAL_StatusTypeDef SSD1680_Checker(SSD1680_HandleTypeDef *hepd);
 #endif // INC_SSD1680_H_

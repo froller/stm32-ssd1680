@@ -94,9 +94,6 @@ Functions</h2></td></tr>
 <tr class="memitem:ad15573de83befc8c9d5490d49a8a47ad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#ad15573de83befc8c9d5490d49a8a47ad">SSD1680_Reset</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd)</td></tr>
 <tr class="memdesc:ad15573de83befc8c9d5490d49a8a47ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hardware reset the display.  <br /></td></tr>
 <tr class="separator:ad15573de83befc8c9d5490d49a8a47ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2e3d82694dd9e786a5ecf88470735d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#ac2e3d82694dd9e786a5ecf88470735d8">SSD1680_Init</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd)</td></tr>
-<tr class="memdesc:ac2e3d82694dd9e786a5ecf88470735d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the display.  <br /></td></tr>
-<tr class="separator:ac2e3d82694dd9e786a5ecf88470735d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32d6f6af5f87bbdda960228bd5e4a708"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#a32d6f6af5f87bbdda960228bd5e4a708">SSD1680_Wait</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd)</td></tr>
 <tr class="memdesc:a32d6f6af5f87bbdda960228bd5e4a708"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait for display ready.  <br /></td></tr>
 <tr class="separator:a32d6f6af5f87bbdda960228bd5e4a708"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -106,33 +103,36 @@ Functions</h2></td></tr>
 <tr class="memitem:a8737b8e4c4b29cacff91940d75f1cf4d"><td class="memItemLeft" align="right" valign="top">HAL_StatusTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#a8737b8e4c4b29cacff91940d75f1cf4d">SSD1680_Receive</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd, const uint8_t command, uint8_t *pData, const size_t size)</td></tr>
 <tr class="memdesc:a8737b8e4c4b29cacff91940d75f1cf4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send command and receive data from the display.  <br /></td></tr>
 <tr class="separator:a8737b8e4c4b29cacff91940d75f1cf4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b92f8de6b83069430ed2e105ab49ad6"><td class="memItemLeft" align="right" valign="top">HAL_StatusTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#a1b92f8de6b83069430ed2e105ab49ad6">SSD1680_Clear</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd, const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a983ba1765aaffa85b82a4dd7d0a1f639">SSD1680_Color</a> color)</td></tr>
-<tr class="memdesc:a1b92f8de6b83069430ed2e105ab49ad6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the screen.  <br /></td></tr>
-<tr class="separator:a1b92f8de6b83069430ed2e105ab49ad6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ffa24109609433f16077614a043db0f"><td class="memItemLeft" align="right" valign="top">HAL_StatusTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#a2ffa24109609433f16077614a043db0f">SSD1680_Checker</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd)</td></tr>
-<tr class="memdesc:a2ffa24109609433f16077614a043db0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shows checker pattern.  <br /></td></tr>
-<tr class="separator:a2ffa24109609433f16077614a043db0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84f4f9dd8143f6d6c35cfe3e96b8efc8"><td class="memItemLeft" align="right" valign="top">HAL_StatusTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#a84f4f9dd8143f6d6c35cfe3e96b8efc8">SSD1680_RAMFill</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd, const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a213ae5d22cf89884314c0788dd7c25ee">SSD1680_Pattern</a> kx, const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a213ae5d22cf89884314c0788dd7c25ee">SSD1680_Pattern</a> ky, const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a213ae5d22cf89884314c0788dd7c25ee">SSD1680_Pattern</a> rx, const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a213ae5d22cf89884314c0788dd7c25ee">SSD1680_Pattern</a> ry, const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a983ba1765aaffa85b82a4dd7d0a1f639">SSD1680_Color</a> color)</td></tr>
-<tr class="memdesc:a84f4f9dd8143f6d6c35cfe3e96b8efc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shows checker pattern.  <br /></td></tr>
-<tr class="separator:a84f4f9dd8143f6d6c35cfe3e96b8efc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb5ff9882d8ec031029fdd2f1c8385c0"><td class="memItemLeft" align="right" valign="top">HAL_StatusTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#afb5ff9882d8ec031029fdd2f1c8385c0">SSD1680_Refresh</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd, const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a0ac871ae5d039633a2f84ce5d6895f97">SSD1680_RefreshMode</a> mode)</td></tr>
-<tr class="memdesc:afb5ff9882d8ec031029fdd2f1c8385c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the display.  <br /></td></tr>
-<tr class="separator:afb5ff9882d8ec031029fdd2f1c8385c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12398d0ba27bd1e11928108440edf727"><td class="memItemLeft" align="right" valign="top">HAL_StatusTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#a12398d0ba27bd1e11928108440edf727">SSD1680_DataEntryMode</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd, const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a249ceaed92fbe9b37f92db2868f2c162">SSD1680_DataEntryMode</a> mode)</td></tr>
-<tr class="memdesc:a12398d0ba27bd1e11928108440edf727"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set data entry mode.  <br /></td></tr>
-<tr class="separator:a12398d0ba27bd1e11928108440edf727"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33a1b82977120882539dc1e2b68bac81"><td class="memItemLeft" align="right" valign="top">HAL_StatusTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#a33a1b82977120882539dc1e2b68bac81">SSD1680_GateScanRange</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd, const uint16_t top, const uint16_t height)</td></tr>
 <tr class="memdesc:a33a1b82977120882539dc1e2b68bac81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get gate (row) scan range for refresh operation.  <br /></td></tr>
 <tr class="separator:a33a1b82977120882539dc1e2b68bac81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12398d0ba27bd1e11928108440edf727"><td class="memItemLeft" align="right" valign="top">HAL_StatusTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#a12398d0ba27bd1e11928108440edf727">SSD1680_DataEntryMode</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd, const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a249ceaed92fbe9b37f92db2868f2c162">SSD1680_DataEntryMode</a> mode)</td></tr>
+<tr class="memdesc:a12398d0ba27bd1e11928108440edf727"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set data entry mode.  <br /></td></tr>
+<tr class="separator:a12398d0ba27bd1e11928108440edf727"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb86bc346f7cae805c4414f3b72af48d"><td class="memItemLeft" align="right" valign="top">HAL_StatusTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#abb86bc346f7cae805c4414f3b72af48d">SSD1680_UpdateControl</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd)</td></tr>
+<tr class="memdesc:abb86bc346f7cae805c4414f3b72af48d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send update control sequence 1.  <br /></td></tr>
+<tr class="separator:abb86bc346f7cae805c4414f3b72af48d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2e3d82694dd9e786a5ecf88470735d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#ac2e3d82694dd9e786a5ecf88470735d8">SSD1680_Init</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd)</td></tr>
+<tr class="memdesc:ac2e3d82694dd9e786a5ecf88470735d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the display.  <br /></td></tr>
+<tr class="separator:ac2e3d82694dd9e786a5ecf88470735d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add15e5144b89daf5c8dfff4454ee1dd8"><td class="memItemLeft" align="right" valign="top">HAL_StatusTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#add15e5144b89daf5c8dfff4454ee1dd8">SSD1680_RAMXRange</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd, const uint8_t left, const uint8_t width)</td></tr>
 <tr class="memdesc:add15e5144b89daf5c8dfff4454ee1dd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set horizontal RAM range.  <br /></td></tr>
 <tr class="separator:add15e5144b89daf5c8dfff4454ee1dd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af743da0fc521151131f2c24ede56f567"><td class="memItemLeft" align="right" valign="top">HAL_StatusTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#af743da0fc521151131f2c24ede56f567">SSD1680_RAMYRange</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd, const uint16_t top, const uint16_t height)</td></tr>
 <tr class="memdesc:af743da0fc521151131f2c24ede56f567"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set vertical RAM range.  <br /></td></tr>
 <tr class="separator:af743da0fc521151131f2c24ede56f567"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb86bc346f7cae805c4414f3b72af48d"><td class="memItemLeft" align="right" valign="top">HAL_StatusTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#abb86bc346f7cae805c4414f3b72af48d">SSD1680_UpdateControl</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd)</td></tr>
-<tr class="memdesc:abb86bc346f7cae805c4414f3b72af48d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send update control sequence 1.  <br /></td></tr>
-<tr class="separator:abb86bc346f7cae805c4414f3b72af48d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84f4f9dd8143f6d6c35cfe3e96b8efc8"><td class="memItemLeft" align="right" valign="top">HAL_StatusTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#a84f4f9dd8143f6d6c35cfe3e96b8efc8">SSD1680_RAMFill</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd, const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a213ae5d22cf89884314c0788dd7c25ee">SSD1680_Pattern</a> kx, const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a213ae5d22cf89884314c0788dd7c25ee">SSD1680_Pattern</a> ky, const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a213ae5d22cf89884314c0788dd7c25ee">SSD1680_Pattern</a> rx, const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a213ae5d22cf89884314c0788dd7c25ee">SSD1680_Pattern</a> ry, const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a983ba1765aaffa85b82a4dd7d0a1f639">SSD1680_Color</a> color)</td></tr>
+<tr class="memdesc:a84f4f9dd8143f6d6c35cfe3e96b8efc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shows checker pattern.  <br /></td></tr>
+<tr class="separator:a84f4f9dd8143f6d6c35cfe3e96b8efc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b92f8de6b83069430ed2e105ab49ad6"><td class="memItemLeft" align="right" valign="top">HAL_StatusTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#a1b92f8de6b83069430ed2e105ab49ad6">SSD1680_Clear</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd, const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a983ba1765aaffa85b82a4dd7d0a1f639">SSD1680_Color</a> color)</td></tr>
+<tr class="memdesc:a1b92f8de6b83069430ed2e105ab49ad6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the screen.  <br /></td></tr>
+<tr class="separator:a1b92f8de6b83069430ed2e105ab49ad6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ffa24109609433f16077614a043db0f"><td class="memItemLeft" align="right" valign="top">HAL_StatusTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#a2ffa24109609433f16077614a043db0f">SSD1680_Checker</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd)</td></tr>
+<tr class="memdesc:a2ffa24109609433f16077614a043db0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shows checker pattern.  <br /></td></tr>
+<tr class="separator:a2ffa24109609433f16077614a043db0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb5ff9882d8ec031029fdd2f1c8385c0"><td class="memItemLeft" align="right" valign="top">HAL_StatusTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#afb5ff9882d8ec031029fdd2f1c8385c0">SSD1680_Refresh</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd, const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a0ac871ae5d039633a2f84ce5d6895f97">SSD1680_RefreshMode</a> mode)</td></tr>
+<tr class="memdesc:afb5ff9882d8ec031029fdd2f1c8385c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the display.  <br /></td></tr>
+<tr class="separator:afb5ff9882d8ec031029fdd2f1c8385c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa46942a100f1f8d89afae84df664c81"><td class="memItemLeft" align="right" valign="top">HAL_StatusTypeDef&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/dc8/SSD1680_8c.html#aaa46942a100f1f8d89afae84df664c81">SSD1680_Border</a> (<a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *hepd, const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a983ba1765aaffa85b82a4dd7d0a1f639">SSD1680_Color</a> color)</td></tr>
 <tr class="memdesc:aaa46942a100f1f8d89afae84df664c81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set border color.  <br /></td></tr>
 <tr class="separator:aaa46942a100f1f8d89afae84df664c81"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -200,40 +200,6 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="ac2e3d82694dd9e786a5ecf88470735d8" name="ac2e3d82694dd9e786a5ecf88470735d8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac2e3d82694dd9e786a5ecf88470735d8">&#9670;&#160;</a></span>SSD1680_Init()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void SSD1680_Init </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *&#160;</td>
-          <td class="paramname"><em>hepd</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Initialize the display. </p>
-<ul>
-<li>Reset the disply </li>
-<li>Send initialization sequence </li>
-<li>Set source and gate scan ranges to maximum resolution </li>
-<li>Enable internal temperature sensor </li>
-<li>Setup voltage sources </li>
-<li>Set data entry mode to <a class="el" href="../../d6/d24/SSD1680_8h.html#a249ceaed92fbe9b37f92db2868f2c162a2d65cbd02073cc8f6fbae0c5e31aea97">RightThenDown</a> <dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">hepd</td><td>SSD1680 handle pointer </td></tr>
-  </table>
-  </dd>
-</dl>
-</li>
-</ul>
 
 </div>
 </div>
@@ -369,219 +335,6 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a1b92f8de6b83069430ed2e105ab49ad6" name="a1b92f8de6b83069430ed2e105ab49ad6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1b92f8de6b83069430ed2e105ab49ad6">&#9670;&#160;</a></span>SSD1680_Clear()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">HAL_StatusTypeDef SSD1680_Clear </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *&#160;</td>
-          <td class="paramname"><em>hepd</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a983ba1765aaffa85b82a4dd7d0a1f639">SSD1680_Color</a>&#160;</td>
-          <td class="paramname"><em>color</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Clears the screen. </p>
-<p>Fills the screen with specified solid color </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">hepd</td><td>SSD1680 handle pointer </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">color</td><td>color to fill the screen </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>HAL status </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>Slow. Waits for display ready. </dd></dl>
-
-</div>
-</div>
-<a id="a2ffa24109609433f16077614a043db0f" name="a2ffa24109609433f16077614a043db0f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ffa24109609433f16077614a043db0f">&#9670;&#160;</a></span>SSD1680_Checker()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">HAL_StatusTypeDef SSD1680_Checker </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *&#160;</td>
-          <td class="paramname"><em>hepd</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Shows checker pattern. </p>
-<p>Fills the screen with checker pattern 16x16 for primary (black) color and 8x8 for secondary (red) color. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">hepd</td><td>SSD1680 handle pointer </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>HAL status </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>Slow. Waits for display ready. </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="../../d7/dc8/SSD1680_8c.html#a84f4f9dd8143f6d6c35cfe3e96b8efc8" title="Shows checker pattern.">SSD1680_RAMFill</a> for custom patterns </dd></dl>
-
-</div>
-</div>
-<a id="a84f4f9dd8143f6d6c35cfe3e96b8efc8" name="a84f4f9dd8143f6d6c35cfe3e96b8efc8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a84f4f9dd8143f6d6c35cfe3e96b8efc8">&#9670;&#160;</a></span>SSD1680_RAMFill()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">HAL_StatusTypeDef SSD1680_RAMFill </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *&#160;</td>
-          <td class="paramname"><em>hepd</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a213ae5d22cf89884314c0788dd7c25ee">SSD1680_Pattern</a>&#160;</td>
-          <td class="paramname"><em>kx</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a213ae5d22cf89884314c0788dd7c25ee">SSD1680_Pattern</a>&#160;</td>
-          <td class="paramname"><em>ky</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a213ae5d22cf89884314c0788dd7c25ee">SSD1680_Pattern</a>&#160;</td>
-          <td class="paramname"><em>rx</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a213ae5d22cf89884314c0788dd7c25ee">SSD1680_Pattern</a>&#160;</td>
-          <td class="paramname"><em>ry</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a983ba1765aaffa85b82a4dd7d0a1f639">SSD1680_Color</a>&#160;</td>
-          <td class="paramname"><em>color</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Shows checker pattern. </p>
-<p>Fills the screen with checker pattern with specified strides for primary and secondary colors. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">hepd</td><td>SSD1680 handle pointer </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">kx</td><td>horizontal stride for primary color </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ky</td><td>vertical stride for primary color </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">rx</td><td>horizontal stride for secondary color </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ry</td><td>vertical stride for secondary color </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">color</td><td>color of the top-left pixel </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>HAL status </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>Slow. Waits for display ready. </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="../../d7/dc8/SSD1680_8c.html#a2ffa24109609433f16077614a043db0f" title="Shows checker pattern.">SSD1680_Checker</a> for common test pattern </dd></dl>
-
-</div>
-</div>
-<a id="afb5ff9882d8ec031029fdd2f1c8385c0" name="afb5ff9882d8ec031029fdd2f1c8385c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afb5ff9882d8ec031029fdd2f1c8385c0">&#9670;&#160;</a></span>SSD1680_Refresh()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">HAL_StatusTypeDef SSD1680_Refresh </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *&#160;</td>
-          <td class="paramname"><em>hepd</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a0ac871ae5d039633a2f84ce5d6895f97">SSD1680_RefreshMode</a>&#160;</td>
-          <td class="paramname"><em>mode</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Update the display. </p>
-<p>Start update sequence to show internal memory content on the display. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">hepd</td><td>SSD1680 handle pointer </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>Refresh mode </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>HAL status </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>Slow. Waits for display to complete operation. </dd></dl>
-
-</div>
-</div>
-<a id="a12398d0ba27bd1e11928108440edf727" name="a12398d0ba27bd1e11928108440edf727"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a12398d0ba27bd1e11928108440edf727">&#9670;&#160;</a></span>SSD1680_DataEntryMode()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">HAL_StatusTypeDef <a class="el" href="../../d6/d24/SSD1680_8h.html#a249ceaed92fbe9b37f92db2868f2c162">SSD1680_DataEntryMode</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *&#160;</td>
-          <td class="paramname"><em>hepd</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a249ceaed92fbe9b37f92db2868f2c162">SSD1680_DataEntryMode</a>&#160;</td>
-          <td class="paramname"><em>mode</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Set data entry mode. </p>
-<p>Set behavior of address pointer on bulk data transfer into or out of RAM </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">hepd</td><td>SSD1680 handle pointer </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>Data entry mode </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>HAL status </dd></dl>
-
-</div>
-</div>
 <a id="a33a1b82977120882539dc1e2b68bac81" name="a33a1b82977120882539dc1e2b68bac81"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a33a1b82977120882539dc1e2b68bac81">&#9670;&#160;</a></span>SSD1680_GateScanRange()</h2>
 
@@ -624,6 +377,106 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>HAL status </dd></dl>
+
+</div>
+</div>
+<a id="a12398d0ba27bd1e11928108440edf727" name="a12398d0ba27bd1e11928108440edf727"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12398d0ba27bd1e11928108440edf727">&#9670;&#160;</a></span>SSD1680_DataEntryMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">HAL_StatusTypeDef <a class="el" href="../../d6/d24/SSD1680_8h.html#a249ceaed92fbe9b37f92db2868f2c162">SSD1680_DataEntryMode</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *&#160;</td>
+          <td class="paramname"><em>hepd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a249ceaed92fbe9b37f92db2868f2c162">SSD1680_DataEntryMode</a>&#160;</td>
+          <td class="paramname"><em>mode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set data entry mode. </p>
+<p>Set behavior of address pointer on bulk data transfer into or out of RAM </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">hepd</td><td>SSD1680 handle pointer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>Data entry mode </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>HAL status </dd></dl>
+
+</div>
+</div>
+<a id="abb86bc346f7cae805c4414f3b72af48d" name="abb86bc346f7cae805c4414f3b72af48d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb86bc346f7cae805c4414f3b72af48d">&#9670;&#160;</a></span>SSD1680_UpdateControl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">HAL_StatusTypeDef SSD1680_UpdateControl </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *&#160;</td>
+          <td class="paramname"><em>hepd</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Send update control sequence 1. </p>
+<p>Not intended to be used outside of SSD1680_Refresh </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">hepd</td><td>SSD1680 handle pointer </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>HAL status </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="../../d7/dc8/SSD1680_8c.html#afb5ff9882d8ec031029fdd2f1c8385c0" title="Update the display.">SSD1680_Refresh</a> </dd></dl>
+
+</div>
+</div>
+<a id="ac2e3d82694dd9e786a5ecf88470735d8" name="ac2e3d82694dd9e786a5ecf88470735d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2e3d82694dd9e786a5ecf88470735d8">&#9670;&#160;</a></span>SSD1680_Init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SSD1680_Init </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *&#160;</td>
+          <td class="paramname"><em>hepd</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialize the display. </p>
+<ul>
+<li>Reset the disply </li>
+<li>Send initialization sequence </li>
+<li>Set source and gate scan ranges to maximum resolution </li>
+<li>Enable internal temperature sensor </li>
+<li>Setup voltage sources </li>
+<li>Set data entry mode to <a class="el" href="../../d6/d24/SSD1680_8h.html#a249ceaed92fbe9b37f92db2868f2c162a2d65cbd02073cc8f6fbae0c5e31aea97">RightThenDown</a> <dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">hepd</td><td>SSD1680 handle pointer </td></tr>
+  </table>
+  </dd>
+</dl>
+</li>
+</ul>
 
 </div>
 </div>
@@ -723,14 +576,121 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="abb86bc346f7cae805c4414f3b72af48d" name="abb86bc346f7cae805c4414f3b72af48d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abb86bc346f7cae805c4414f3b72af48d">&#9670;&#160;</a></span>SSD1680_UpdateControl()</h2>
+<a id="a84f4f9dd8143f6d6c35cfe3e96b8efc8" name="a84f4f9dd8143f6d6c35cfe3e96b8efc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84f4f9dd8143f6d6c35cfe3e96b8efc8">&#9670;&#160;</a></span>SSD1680_RAMFill()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">HAL_StatusTypeDef SSD1680_UpdateControl </td>
+          <td class="memname">HAL_StatusTypeDef SSD1680_RAMFill </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *&#160;</td>
+          <td class="paramname"><em>hepd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a213ae5d22cf89884314c0788dd7c25ee">SSD1680_Pattern</a>&#160;</td>
+          <td class="paramname"><em>kx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a213ae5d22cf89884314c0788dd7c25ee">SSD1680_Pattern</a>&#160;</td>
+          <td class="paramname"><em>ky</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a213ae5d22cf89884314c0788dd7c25ee">SSD1680_Pattern</a>&#160;</td>
+          <td class="paramname"><em>rx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a213ae5d22cf89884314c0788dd7c25ee">SSD1680_Pattern</a>&#160;</td>
+          <td class="paramname"><em>ry</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a983ba1765aaffa85b82a4dd7d0a1f639">SSD1680_Color</a>&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Shows checker pattern. </p>
+<p>Fills the screen with checker pattern with specified strides for primary and secondary colors. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">hepd</td><td>SSD1680 handle pointer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">kx</td><td>horizontal stride for primary color </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ky</td><td>vertical stride for primary color </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">rx</td><td>horizontal stride for secondary color </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ry</td><td>vertical stride for secondary color </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">color</td><td>color of the top-left pixel </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>HAL status </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Slow. Waits for display ready. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="../../d7/dc8/SSD1680_8c.html#a2ffa24109609433f16077614a043db0f" title="Shows checker pattern.">SSD1680_Checker</a> for common test pattern </dd></dl>
+
+</div>
+</div>
+<a id="a1b92f8de6b83069430ed2e105ab49ad6" name="a1b92f8de6b83069430ed2e105ab49ad6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b92f8de6b83069430ed2e105ab49ad6">&#9670;&#160;</a></span>SSD1680_Clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">HAL_StatusTypeDef SSD1680_Clear </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *&#160;</td>
+          <td class="paramname"><em>hepd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a983ba1765aaffa85b82a4dd7d0a1f639">SSD1680_Color</a>&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clears the screen. </p>
+<p>Fills the screen with specified solid color </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">hepd</td><td>SSD1680 handle pointer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">color</td><td>color to fill the screen </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>HAL status </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Slow. Waits for display ready. </dd></dl>
+
+</div>
+</div>
+<a id="a2ffa24109609433f16077614a043db0f" name="a2ffa24109609433f16077614a043db0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ffa24109609433f16077614a043db0f">&#9670;&#160;</a></span>SSD1680_Checker()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">HAL_StatusTypeDef SSD1680_Checker </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *&#160;</td>
           <td class="paramname"><em>hepd</em></td><td>)</td>
@@ -739,15 +699,55 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Send update control sequence 1. </p>
-<p>Not intended to be used outside of SSD1680_Refresh </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Shows checker pattern. </p>
+<p>Fills the screen with checker pattern 16x16 for primary (black) color and 8x8 for secondary (red) color. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">hepd</td><td>SSD1680 handle pointer </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>HAL status </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="../../d7/dc8/SSD1680_8c.html#afb5ff9882d8ec031029fdd2f1c8385c0" title="Update the display.">SSD1680_Refresh</a> </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Slow. Waits for display ready. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="../../d7/dc8/SSD1680_8c.html#a84f4f9dd8143f6d6c35cfe3e96b8efc8" title="Shows checker pattern.">SSD1680_RAMFill</a> for custom patterns </dd></dl>
+
+</div>
+</div>
+<a id="afb5ff9882d8ec031029fdd2f1c8385c0" name="afb5ff9882d8ec031029fdd2f1c8385c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb5ff9882d8ec031029fdd2f1c8385c0">&#9670;&#160;</a></span>SSD1680_Refresh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">HAL_StatusTypeDef SSD1680_Refresh </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d6/d14/structSSD1680__HandleTypeDef.html">SSD1680_HandleTypeDef</a> *&#160;</td>
+          <td class="paramname"><em>hepd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const enum <a class="el" href="../../d6/d24/SSD1680_8h.html#a0ac871ae5d039633a2f84ce5d6895f97">SSD1680_RefreshMode</a>&#160;</td>
+          <td class="paramname"><em>mode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Update the display. </p>
+<p>Start update sequence to show internal memory content on the display. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">hepd</td><td>SSD1680 handle pointer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>Refresh mode </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>HAL status </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Slow. Waits for display to complete operation. </dd></dl>
 
 </div>
 </div>
